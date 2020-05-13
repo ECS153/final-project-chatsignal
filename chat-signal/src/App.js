@@ -1,11 +1,15 @@
 import React from 'react';
+import loginScreen from './login.js';
 
 function App() {
   return (
     // Add css styling like below
     <div style={Styles.sampleStyle1}>
-      Ayyy Let's Start coding!
+    <loginScreen />
+      Ayyy Let's Start coding! 
+
     </div>
+
   );
 }
 
