@@ -24,7 +24,7 @@ class ContactsSidebar extends Component {
   };
   render() {
     return (
-      <React.Fragment>
+      <React.Fragment style={Styles.mainContainer}>
         <ContactCell
           style={Styles.contactStyle}
           initial="D"
@@ -52,11 +52,15 @@ class ContactsSidebar extends Component {
 }
 
 const Styles = {
+  mainContainer: {
+    height: '100%',
+  },
   contactStyle: {
     display: "flex",
+    flexDirection: 'column',
     backgroundColor: "#2F455C",
     fontSize: 25,
-    color: "#84878A",
+    color: "#8488A",
     margin: 3,
   },
   btnStyle: {
@@ -67,10 +71,8 @@ const Styles = {
   blubStyle: {
     display: "flex",
     flexGrow: 1,
-
     justifyContent: "center",
     alignContent: "center",
-
     width: 50,
     height: 50,
     maxWidth: 50,

@@ -1,12 +1,12 @@
 import React from 'react';
-import loginScreen from './login.js';
-
+import LoginScreen from './login.js';
+import ChatRoom from './ChatRoom/index.js';
 function App() {
   return (
     // Add css styling like below
     <div style={Styles.sampleStyle1}>
-    <loginScreen />
-      Ayyy Let's Start coding! 
+      {/* <LoginScreen /> */}
+      <ChatRoom />
 
     </div>
 
@@ -15,11 +15,11 @@ function App() {
 
 //NOTE: Add styles here (basically CSS syntax but in camel case)
 const Styles = {
-  sampleStyle1: {
-    backgroundColor: 'lightblue',
-    fontSize: 40,
-    color: 'red',
-  },
+  // sampleStyle1: {
+  //   backgroundColor: 'lightblue',
+  //   fontSize: 40,
+  //   color: 'red',
+  // },
 }
 
 export default App;
