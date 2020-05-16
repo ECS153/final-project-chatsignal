@@ -22,8 +22,6 @@ const ChatRoom = () => {
 const Styles = {
     MainContainer: {
         display: 'flex',
-
-
     },
     leftContainer: {
         width: '30%',
@@ -33,8 +31,6 @@ const Styles = {
     rightContainer: {
         width: '70%',
         height: '100vh',
-        backgroundColor: 'lightpurple',
-
     }
 }
 
