@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import MsgInputBox from "./MsgInputBox";
+
+import MsgInputBox from './MsgInputBox';
+import 'antd/dist/antd.css';
+import { Button } from 'antd';
+
 
 const MessageCell = (props) => (
   <div style={props.style}>
@@ -90,7 +94,14 @@ const Chatbox = () => {
     <div style={Styles.MainContainer}>
       <div style={Styles.topContainer}>
         <div style={Styles.nameWrapperStyle}>{receiverName}</div>
-        <div style={Styles.endConnectionButtonStyle}>End Connection</div>
+        <Button
+          danger
+          type="primary"
+          size="large"
+          style={Styles.endConnectionButtonStyle}
+        >
+          End Connection
+        </Button>
       </div>
       <div>
         <MsgHistoryBox />
@@ -124,10 +135,7 @@ const Styles = {
     fontWeight: 400,
   },
   endConnectionButtonStyle: {
-    fontSize: 35,
-    color: "red",
     fontFamily: "Karla",
-    fontWeight: 400,
   },
 };
 
