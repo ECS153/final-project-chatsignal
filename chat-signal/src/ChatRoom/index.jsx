@@ -3,6 +3,7 @@ import ContactsSidebar from "./ContactsSidebar";
 import Chatbox from "./Chatbox";
 
 const ChatRoom = () => {
+
   return (
     <div style={Styles.MainContainer}>
       <div style={Styles.leftContainer}>

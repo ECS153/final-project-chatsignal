@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import MsgInputBox from './MsgInputBox';
 
 const MessageCell = (props) => (
   <div style={props.style}>
@@ -16,7 +17,7 @@ const MessageCell = (props) => (
   </div>
 );
 
-const MessageBox = () => {
+const MsgHistoryBox = () => {
   const [msgs, setMsgs] = useState([
     { type: "external", content: "Hello how are you bro?" },
     { type: "external", content: "what u up to" },
@@ -81,6 +82,9 @@ const MessageBox = () => {
     </div>
   );
 };
+
+
+
 const Chatbox = () => {
   const [receiverName, setReceiverName] = useState("Andy Wu");
 
@@ -91,10 +95,10 @@ const Chatbox = () => {
         <div style={Styles.endConnectionButtonStyle}>End Connection</div>
       </div>
       <div>
-        <MessageBox />
+        <MsgHistoryBox />
       </div>
       <div>
-        <MessageBox />
+        <MsgInputBox />
       </div>
     </div>
   );
@@ -102,9 +106,8 @@ const Chatbox = () => {
 
 const Styles = {
   MainContainer: {
-    // backgroundColor: "lightyellow",
     height: "100%",
-    padding: "15px 15px",
+    padding: "0px 15px 15px",
   },
   topContainer: {
     height: 100,
@@ -113,19 +116,18 @@ const Styles = {
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0 20px",
-    // backgroundColor: "blue",
+    boxShadow: '0px 15px 10px -15px gray',
+    marginBottom: 12
   },
   nameWrapperStyle: {
     fontSize: 35,
     color: "gray",
-
     fontFamily: "Karla",
     fontWeight: 400,
   },
   endConnectionButtonStyle: {
     fontSize: 35,
     color: "red",
-
     fontFamily: "Karla",
     fontWeight: 400,
   },
