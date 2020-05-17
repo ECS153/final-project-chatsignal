@@ -1,15 +1,13 @@
-import React from 'react';
-import LoginScreen from './login.js';
-import ChatRoom from './ChatRoom/index.js';
+import React from "react";
+import LoginScreen from "./login.js";
+import ChatRoom from "./ChatRoom/index.jsx";
 function App() {
   return (
     // Add css styling like below
     <div style={Styles.sampleStyle1}>
       {/* <LoginScreen /> */}
       <ChatRoom />
-
     </div>
-
   );
 }
 
@@ -20,6 +18,6 @@ const Styles = {
   //   fontSize: 40,
   //   color: 'red',
   // },
-}
+};
 
 export default App;

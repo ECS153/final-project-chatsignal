@@ -37,14 +37,13 @@ class ContactsSidebar extends Component {
           <div style={Styles.actualBtnStyle}>CONTACTS</div>
           <div
             style={{
-              marginLeft: 5,
-              marginRight: 5,
+              paddingLeft: 30,
+              paddingRight: 30,
               fontSize: 28,
               color: "#B2B2B2",
             }}
           >
-            {" "}
-            |{" "}
+            |
           </div>
           <div style={Styles.actualBtnStyle}>NEW CHAT</div>
         </div>
@@ -66,17 +65,23 @@ const Styles = {
   mainContainer: {
     height: "100%",
   },
+
   contactStyle: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     margin: 3,
+    paddingTop: 5,
+    paddingBottom: 5,
+    // backgroundColor: "pink",
   },
 
   btnBarStyle: {
     display: "flex",
     justifyContent: "space-between",
     margin: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
 
   actualBtnStyle: {
@@ -95,9 +100,9 @@ const Styles = {
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    width: 80,
-    height: 80,
-    maxWidth: 80,
+    width: 65,
+    height: 65,
+    maxWidth: 65,
 
     fontFamily: "Karla",
     fontWeight: 400,
@@ -132,7 +137,7 @@ const Styles = {
     display: "flex",
     fontFamily: "Karla",
     fontWeight: 400,
-    fontSize: 25,
+    fontSize: 20,
     margin: 1,
     color: "green",
   },
@@ -140,8 +145,8 @@ const Styles = {
   contactNameStyle: {
     display: "flex",
     fontFamily: "Karla",
-    fontWeight: 400,
-    fontSize: 25,
+    fontWeight: 700,
+    fontSize: 20,
     margin: 1,
     color: "#B2B2B2",
   },
@@ -150,7 +155,7 @@ const Styles = {
     display: "flex",
     fontFamily: "Karla",
     fontWeight: 400,
-    fontSize: 33,
+    fontSize: 26,
     margin: 1,
     color: "green",
   },

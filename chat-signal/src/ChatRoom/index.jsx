@@ -18,6 +18,8 @@ const ChatRoom = () => {
 const Styles = {
   MainContainer: {
     display: "flex",
+    margin: 0,
+    padding: 0,
   },
   leftContainer: {
     width: "30%",
