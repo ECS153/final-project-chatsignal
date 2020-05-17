@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
-import ContactsSidebar from "./ContactsSidebar";
-import Chatbox from "./Chatbox";
+import ContactsSidebar from "./ContactsSidebar.jsx";
+import Chatbox from "./Chatbox.jsx";
 
 const ChatRoom = () => {
-  const [contacts, setContacts] = useState(
-    [
-      { initial: "A", name: "Andy Wu", status: "User is typing..." },
-      { initial: "C", name: "Corbin Harell", status: "1 New Message" },
-      { initial: "J", name: "Jason Lin", status: "User is typing..." },
-    ]
-  );
+  const [contacts, setContacts] = useState([
+    { initial: "A", name: "Andy Wu", status: "User is typing..." },
+    { initial: "C", name: "Corbin Harell", status: "1 New Message" },
+    { initial: "J", name: "Jason Lin", status: "User is typing..." },
+  ]);
   // default to chatting with first person on contact list
   const [selectedChatterIndex, setSelectedChatterIndex] = useState(2);
 

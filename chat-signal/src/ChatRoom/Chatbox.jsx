@@ -1,29 +1,22 @@
 import React, { useState, useEffect } from "react";
 
-import MsgInputBox from './MsgInputBox';
-import ContactCell from './ContactCell';
-import 'antd/dist/antd.css';
-import { Button } from 'antd';
-
+import MsgInputBox from "./MsgInputBox.jsx";
+import ContactCell from "./ContactCell.jsx";
+import "antd/dist/antd.css";
+import { Button } from "antd";
 
 const MessageCell = (props) => (
   <div style={props.style}>
-    <div
-      style={Styles.messageCellContainer}
-    >
-      {props.showAvatar
-        ? (
-          <div style={Styles.blubStyle}>
-            {props.chatter.initial}
-          </div>
-        ) : null
-      }
+    <div style={Styles.messageCellContainer}>
+      {props.showAvatar ? (
+        <div style={Styles.blubStyle}>{props.chatter.initial}</div>
+      ) : null}
       {props.content}
     </div>
   </div>
 );
 
-const MsgHistoryBox = props => {
+const MsgHistoryBox = (props) => {
   const [msgs, setMsgs] = useState([
     { type: "external", content: "Hello how are you bro?" },
     { type: "external", content: "what u up to" },
@@ -66,8 +59,8 @@ const MsgHistoryBox = props => {
   );
 };
 
-const Chatbox = props => {
-  console.log(props.chatter) // chatter is the person you currently selected to chat with
+const Chatbox = (props) => {
+  console.log(props.chatter); // chatter is the person you currently selected to chat with
   return (
     <div style={Styles.MainContainer}>
       <div style={Styles.topContainer}>
@@ -82,9 +75,7 @@ const Chatbox = props => {
         </Button>
       </div>
       <div>
-        <MsgHistoryBox
-          chatter={props.chatter}
-        />
+        <MsgHistoryBox chatter={props.chatter} />
       </div>
       <div>
         <MsgInputBox />
@@ -132,7 +123,7 @@ const Styles = {
     backgroundColor: "white",
     color: "#B2B2B2",
     borderRadius: 1000,
-    margin: '8px 14px 8px 0'
+    margin: "8px 14px 8px 0",
   },
   messageCellContainer: {
     backgroundColor: "#3C5B7C",
@@ -140,9 +131,9 @@ const Styles = {
     padding: "12px 20px",
     borderRadius: 25,
     fontSize: 14,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   externalMessageStyle: {
     display: "flex",

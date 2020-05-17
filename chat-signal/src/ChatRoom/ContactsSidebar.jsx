@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ContactCell from './ContactCell';
+import ContactCell from "./ContactCell.jsx";
 
 class ContactsSidebar extends Component {
   state = {
@@ -121,24 +121,6 @@ const Styles = {
     fontFamily: "Karla",
     fontWeight: 400,
     fontSize: 20,
-    margin: 1,
-    color: "green",
-  },
-
-  contactNameStyle: {
-    display: "flex",
-    fontFamily: "Karla",
-    fontWeight: 700,
-    fontSize: 20,
-    margin: 1,
-    color: "#B2B2B2",
-  },
-
-  contactStatusStyle: {
-    display: "flex",
-    fontFamily: "Karla",
-    fontWeight: 400,
-    fontSize: 26,
     margin: 1,
     color: "green",
   },
