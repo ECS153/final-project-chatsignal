@@ -4,20 +4,11 @@ import ChatRoom from "./ChatRoom/index.jsx";
 function App() {
   return (
     // Add css styling like below
-    <div style={Styles.sampleStyle1}>
+    <div>
       {/* <LoginScreen /> */}
       <ChatRoom />
     </div>
   );
 }
-
-//NOTE: Add styles here (basically CSS syntax but in camel case)
-const Styles = {
-  // sampleStyle1: {
-  //   backgroundColor: 'lightblue',
-  //   fontSize: 40,
-  //   color: 'red',
-  // },
-};
 
 export default App;

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+
 import MsgInputBox from './MsgInputBox';
 import ContactCell from './ContactCell';
 import 'antd/dist/antd.css';
 import { Button } from 'antd';
+
 
 const MessageCell = (props) => (
   <div style={props.style}>
@@ -103,8 +105,8 @@ const Styles = {
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0 20px",
-    boxShadow: '0px 15px 10px -15px gray',
-    marginBottom: 12
+    boxShadow: "0px 15px 10px -15px gray",
+    marginBottom: 12,
   },
   nameWrapperStyle: {
     fontSize: 35,
