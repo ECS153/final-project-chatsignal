@@ -10,7 +10,7 @@ const MsgInputBox = (props) => {
             <TextArea
                 placeholder="Type a message..."
                 autoSize={{ minRows: 6, maxRows: 6 }}
-                maxLength={1000}
+
                 style={Styles.textAreaStyle}
             />
         </div>

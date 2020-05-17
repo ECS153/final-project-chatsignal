@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from "react";
 import MsgInputBox from './MsgInputBox';
+import ContactCell from './ContactCell';
 import 'antd/dist/antd.css';
 import { Button } from 'antd';
 
 const MessageCell = (props) => (
   <div style={props.style}>
     <div
-      style={{
-        backgroundColor: "#3C5B7C",
-        color: "white",
-        padding: "12px 20px",
-        borderRadius: 25,
-        fontSize: 24,
-      }}
+      style={Styles.messageCellContainer}
     >
+      {props.showAvatar
+        ? (
+          <div style={Styles.blubStyle}>
+            {props.chatter.initial}
+          </div>
+        ) : null
+      }
       {props.content}
     </div>
   </div>
 );
 
-const MsgHistoryBox = () => {
+const MsgHistoryBox = props => {
   const [msgs, setMsgs] = useState([
     { type: "external", content: "Hello how are you bro?" },
     { type: "external", content: "what u up to" },
@@ -44,31 +46,6 @@ const MsgHistoryBox = () => {
     { type: "self", content: "Ok Ill talk to you later" },
   ]);
 
-  const Styles = {
-    externalMessageStyle: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      margin: "12px 0",
-
-      fontFamily: "Karla",
-      fontWeight: 400,
-    },
-    ownMessageStyle: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "flex-end",
-      margin: "12px 0",
-
-      fontFamily: "Karla",
-      fontWeight: 400,
-    },
-    ChatboxContainer: {
-      height: "70vh",
-      padding: "0 20px",
-      overflowY: "scroll",
-    },
-  };
   return (
     <div style={Styles.ChatboxContainer}>
       {msgs.map((msg) => (
@@ -79,21 +56,20 @@ const MsgHistoryBox = () => {
               : Styles.ownMessageStyle
           }
           content={msg.content}
+          chatter={props.chatter}
+          showAvatar={msg.type == "external" ? true : false}
         />
       ))}
     </div>
   );
 };
 
-
-
-const Chatbox = () => {
-  const [receiverName, setReceiverName] = useState("Andy Wu");
-
+const Chatbox = props => {
+  console.log(props.chatter) // chatter is the person you currently selected to chat with
   return (
     <div style={Styles.MainContainer}>
       <div style={Styles.topContainer}>
-        <div style={Styles.nameWrapperStyle}>{receiverName}</div>
+        <div style={Styles.nameWrapperStyle}>{props.chatter.name}</div>
         <Button
           danger
           type="primary"
@@ -104,7 +80,9 @@ const Chatbox = () => {
         </Button>
       </div>
       <div>
-        <MsgHistoryBox />
+        <MsgHistoryBox
+          chatter={props.chatter}
+        />
       </div>
       <div>
         <MsgInputBox />
@@ -136,6 +114,54 @@ const Styles = {
   },
   endConnectionButtonStyle: {
     fontFamily: "Karla",
+  },
+  blubStyle: {
+    display: "flex",
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 35,
+    height: 35,
+    maxWidth: 50,
+    maxHeight: 50,
+    fontFamily: "Karla",
+    fontWeight: 400,
+    fontSize: 24,
+    backgroundColor: "white",
+    color: "#B2B2B2",
+    borderRadius: 1000,
+    margin: '8px 14px 8px 0'
+  },
+  messageCellContainer: {
+    backgroundColor: "#3C5B7C",
+    color: "white",
+    padding: "12px 20px",
+    borderRadius: 25,
+    fontSize: 14,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  externalMessageStyle: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    margin: "12px 0",
+    fontFamily: "Karla",
+    fontWeight: 400,
+  },
+  ownMessageStyle: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    margin: "12px 0",
+    fontFamily: "Karla",
+    fontWeight: 400,
+  },
+  ChatboxContainer: {
+    height: "70vh",
+    padding: "0 20px",
+    overflowY: "scroll",
   },
 };
 

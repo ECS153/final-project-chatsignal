@@ -1,26 +1,9 @@
 import React, { Component } from "react";
-
-class ContactCell extends Component {
-  render() {
-    return (
-      <div style={this.props.style}>
-        <div style={Styles.blubStyle}>{this.props.initial}</div>
-        <div style={Styles.infoStyle}>
-          <div style={Styles.contactNameStyle}>{this.props.name}</div>
-          <div style={Styles.contactStatusStyle}>{this.props.status}</div>
-        </div>
-      </div>
-    );
-  }
-}
+import ContactCell from './ContactCell';
 
 class ContactsSidebar extends Component {
   state = {
-    contacts: [
-      { initial: "A", name: "Andy Wu", status: "User is typing..." },
-      { initial: "C", name: "Corbin Harell", status: "1 New Message" },
-      { initial: "J", name: "Jason Lin", status: "User is typing..." },
-    ],
+    contacts: [...this.props.contacts],
   };
   render() {
     return (
