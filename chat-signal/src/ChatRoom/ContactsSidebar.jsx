@@ -33,7 +33,6 @@ class ContactsSidebar extends Component {
 
         {this.state.contacts.map((cell, index) => (
           <ContactCell
-            style={Styles.contactStyle}
             initial={cell.initial}
             name={cell.name}
             status={cell.status}
@@ -59,7 +58,6 @@ const Styles = {
     margin: 3,
     paddingTop: 5,
     paddingBottom: 5,
-    // backgroundColor: "pink",
   },
 
   btnBarStyle: {

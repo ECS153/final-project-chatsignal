@@ -10,11 +10,10 @@ class ContactCell extends Component {
             name,
             status,
             updateChatter,
-            style: styleFromParent
         } = this.props;
         return (
             <div
-                style={styleFromParent}
+                style={Styles.containerStyle}
                 onClick={shouldDisableSelection ? null : () => updateChatter(index)}
             >
                 <div style={Styles.blubStyle}>{initial}</div>
@@ -28,6 +27,15 @@ class ContactCell extends Component {
 };
 
 const Styles = {
+    containerStyle: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 3,
+        paddingTop: 5,
+        paddingBottom: 5,
+        cursor: "pointer"
+    },
     blubStyle: {
         display: "flex",
         flexGrow: 1,
