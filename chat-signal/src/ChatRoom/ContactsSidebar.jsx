@@ -31,12 +31,14 @@ class ContactsSidebar extends Component {
           <div style={Styles.actualBtnStyle}>NEW CHAT</div>
         </div>
 
-        {this.state.contacts.map((cell) => (
+        {this.state.contacts.map((cell, index) => (
           <ContactCell
             style={Styles.contactStyle}
             initial={cell.initial}
             name={cell.name}
             status={cell.status}
+            index={index}
+            updateChatter={this.props.updateChatter}
           />
         ))}
       </React.Fragment>

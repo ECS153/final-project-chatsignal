@@ -3,12 +3,23 @@ import React, { Component } from "react";
 class ContactCell extends Component {
 
     render() {
+        const {
+            index,
+            initial,
+            name,
+            status,
+            updateChatter,
+            style: styleFromParent
+        } = this.props;
         return (
-            <div style={this.props.style}>
-                <div style={Styles.blubStyle}>{this.props.initial}</div>
+            <div
+                style={styleFromParent}
+                onClick={() => updateChatter(index)}
+            >
+                <div style={Styles.blubStyle}>{initial}</div>
                 <div style={Styles.infoStyle}>
-                    <div style={Styles.contactNameStyle}>{this.props.name}</div>
-                    <div style={Styles.contactStatusStyle}>{this.props.status}</div>
+                    <div style={Styles.contactNameStyle}>{name}</div>
+                    <div style={Styles.contactStatusStyle}>{status}</div>
                 </div>
             </div>
         );
