@@ -3,12 +3,23 @@ import React, { Component } from "react";
 class ContactCell extends Component {
 
     render() {
+        const {
+            shouldDisableSelection,
+            index,
+            initial,
+            name,
+            status,
+            updateChatter,
+        } = this.props;
         return (
-            <div style={this.props.style}>
-                <div style={Styles.blubStyle}>{this.props.initial}</div>
+            <div
+                style={Styles.containerStyle}
+                onClick={shouldDisableSelection ? null : () => updateChatter(index)}
+            >
+                <div style={Styles.blubStyle}>{initial}</div>
                 <div style={Styles.infoStyle}>
-                    <div style={Styles.contactNameStyle}>{this.props.name}</div>
-                    <div style={Styles.contactStatusStyle}>{this.props.status}</div>
+                    <div style={Styles.contactNameStyle}>{name}</div>
+                    <div style={Styles.contactStatusStyle}>{status}</div>
                 </div>
             </div>
         );
@@ -16,6 +27,15 @@ class ContactCell extends Component {
 };
 
 const Styles = {
+    containerStyle: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 3,
+        paddingTop: 5,
+        paddingBottom: 5,
+        cursor: "pointer"
+    },
     blubStyle: {
         display: "flex",
         flexGrow: 1,

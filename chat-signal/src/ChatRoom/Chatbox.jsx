@@ -107,6 +107,7 @@ const Styles = {
   },
   endConnectionButtonStyle: {
     fontFamily: "Karla",
+    borderRadius: 6
   },
   blubStyle: {
     display: "flex",
