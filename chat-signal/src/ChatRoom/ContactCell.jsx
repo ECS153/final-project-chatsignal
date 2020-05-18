@@ -4,6 +4,7 @@ class ContactCell extends Component {
 
     render() {
         const {
+            shouldDisableSelection,
             index,
             initial,
             name,
@@ -14,7 +15,7 @@ class ContactCell extends Component {
         return (
             <div
                 style={styleFromParent}
-                onClick={() => updateChatter(index)}
+                onClick={shouldDisableSelection ? null : () => updateChatter(index)}
             >
                 <div style={Styles.blubStyle}>{initial}</div>
                 <div style={Styles.infoStyle}>

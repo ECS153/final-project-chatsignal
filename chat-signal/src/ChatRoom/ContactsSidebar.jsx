@@ -39,6 +39,7 @@ class ContactsSidebar extends Component {
             status={cell.status}
             index={index}
             updateChatter={this.props.updateChatter}
+            shouldDisableSelection={false}
           />
         ))}
       </React.Fragment>
