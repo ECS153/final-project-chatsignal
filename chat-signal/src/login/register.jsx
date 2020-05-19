@@ -1,5 +1,5 @@
 import React from "react";
-import logoImg from "../chatsignal.png"
+import logoImg from "../chatsignal.png";
 
 export class Register extends React.Component {
   constructor(props) {
@@ -10,9 +10,9 @@ export class Register extends React.Component {
       password: "",
     };
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
@@ -60,14 +60,17 @@ export class Register extends React.Component {
                 onChange={this.handleChange}
               />
             </div>
-            <div className="footer">
-            <button type="button" className="btn" onClick={this.handleSubmit}>
-                Register
-            </button>
-                {/* <button type="button" className="btn">
+          </div>
+        </div>
+        <div className="footer">
+          <button type="button" className="btn" onClick={this.handleSubmit}>
+            Register
+          </button>
+          {/* <button type="button" className="btn">
                     Register
                 </button> */}
-            </div>
         </div>
-    }
+      </div>
+    );
+  }
 }
