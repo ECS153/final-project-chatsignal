@@ -6,7 +6,8 @@ export class Register extends React.Component {
         super(props);
         this.state = {
             username: '',
-            password: '',
+            email: '',
+            password: ''
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -14,7 +15,7 @@ export class Register extends React.Component {
     }
 
     handleChange(event) {
-        this.setState({value: event.target.value});
+        this.setState({ [event.target.name]: event.target.value});
     }
     
     handleSubmit(event) {
@@ -37,7 +38,7 @@ export class Register extends React.Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="username">Email</label>
-                        <input type="text" name="email" placeholder="email"/>
+                        <input type="text" name="email" placeholder="email" onChange={this.handleChange}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
