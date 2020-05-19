@@ -17,34 +17,32 @@ export class Register extends React.Component {
     }
 
     handleChange(event) {
-        this.setState({ [event.target.name]: event.target.value}, ()=> {
-            fetch('https://api.ipify.org?format=jsonp?callback=?', {
-                method: 'GET',
-                headers: {},
-            })
-            .then(res => {
-                return res.text()
-            }).then(ip => {
-                console.log('ip', ip);
-                this.setState({ ip: ip}, ()=> {
-                    this.getCity();
-                });
-            }
-            );
-        });
-        
+            this.setState({ [event.target.name]: event.target.value});
     }
     
+
     getCity() {
-        var endpoint = "http://ip-api.com/json/" + this.state.ip + "?fields=city";
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(response => {
-                // console.log(response)
-                this.setState({
-                    city: response.city
-                })
-            })
+        fetch('https://api.ipify.org?format=jsonp?callback=?', {
+            method: 'GET',
+            headers: {},
+        })
+        .then(res => {
+            return res.text()
+        }).then(ip => {
+            console.log('ip', ip);
+            this.setState({ ip: ip}, ()=> {
+                var endpoint = "http://ip-api.com/json/" + this.state.ip + "?fields=city";
+                fetch(endpoint)
+                    .then(response => response.json())
+                    .then(response => {
+                        // console.log(response)
+                        this.setState({
+                            city: response.city
+                        }, () => this.handleSubmit())
+                    })
+            });
+        }
+        );
     }
 
     handleSubmit(event) {
@@ -79,7 +77,9 @@ export class Register extends React.Component {
                 </div>
             </div>
             <div className="footer">
-            <button type="button" className="btn" onClick={this.handleSubmit}>
+            <button type="button" className="btn" onClick={()=> {
+                this.getCity();
+            }}>
                 Register
             </button>
             </div>
