@@ -53,6 +53,7 @@ export class Register extends React.Component {
                 {/* <button type="button" className="btn">
                     Register
                 </button> */}
+                /* DELETE THIS */
             </div>
         </div>
     }
