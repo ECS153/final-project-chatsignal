@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import logoImg from "../chatsignal.png"
 
 export class Register extends React.Component {
@@ -7,11 +7,24 @@ export class Register extends React.Component {
         this.state = {
             username: '',
             email: '',
-            password: ''
+            password: '',
+            location: ''
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentWillMount() {
+        fetch('https://api.ipify.org?format=jsonp?callback=?', {
+          method: 'GET',
+          headers: {},
+        })
+        .then(res => {
+          return res.text()
+        }).then(ip => {
+          console.log('ip', ip);
+        });
     }
 
     handleChange(event) {
@@ -20,6 +33,7 @@ export class Register extends React.Component {
     
     handleSubmit(event) {
         alert('A name was submitted: ' + this.state.username);
+        alert('An email was submitted: ' + this.state.email);
         alert('A password was submitted: ' + this.state.password);
         event.preventDefault();
     }
