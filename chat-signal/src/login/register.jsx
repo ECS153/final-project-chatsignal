@@ -8,34 +8,52 @@ export class Register extends React.Component {
             username: '',
             email: '',
             password: '',
-            location: ''
+            ip: '',
+            city: '',
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillMount() {
-        fetch('https://api.ipify.org?format=jsonp?callback=?', {
-          method: 'GET',
-          headers: {},
-        })
-        .then(res => {
-          return res.text()
-        }).then(ip => {
-          console.log('ip', ip);
-        });
-    }
-
     handleChange(event) {
-        this.setState({ [event.target.name]: event.target.value});
+        this.setState({ [event.target.name]: event.target.value}, ()=> {
+            fetch('https://api.ipify.org?format=jsonp?callback=?', {
+                method: 'GET',
+                headers: {},
+            })
+            .then(res => {
+                return res.text()
+            }).then(ip => {
+                console.log('ip', ip);
+                this.setState({ ip: ip}, ()=> {
+                    this.getCity();
+                });
+            }
+            );
+        });
+        
     }
     
+    getCity() {
+        var endpoint = "http://ip-api.com/json/" + this.state.ip + "?fields=city";
+        fetch(endpoint)
+            .then(response => response.json())
+            .then(response => {
+                // console.log(response)
+                this.setState({
+                    city: response.city
+                })
+            })
+    }
+
     handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.username);
-        alert('An email was submitted: ' + this.state.email);
-        alert('A password was submitted: ' + this.state.password);
-        event.preventDefault();
+        // alert('A name was submitted: ' + this.state.username);
+        // alert('An email was submitted: ' + this.state.email);
+        // alert('A password was submitted: ' + this.state.password);
+        alert('Your IP is: ' + this.state.ip);
+        alert('Your city is: ' + this.state.city);
+        //event.preventDefault();
     }
 
     render() {
@@ -64,9 +82,6 @@ export class Register extends React.Component {
             <button type="button" className="btn" onClick={this.handleSubmit}>
                 Register
             </button>
-                {/* <button type="button" className="btn">
-                    Register
-                </button> */}
             </div>
         </div>
     }
