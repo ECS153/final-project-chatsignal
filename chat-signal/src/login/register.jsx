@@ -14,6 +14,7 @@ export class Register extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handlePackage = this.handlePackage.bind(this);
     }
 
     handleChange(event) {
@@ -52,6 +53,12 @@ export class Register extends React.Component {
         alert('Your IP is: ' + this.state.ip);
         alert('Your city is: ' + this.state.city);
         //event.preventDefault();
+        this.handlePackage();
+    }
+
+    handlePackage(event) {
+        var tempPackage = {name : this.state.username, password : this.state.password};
+        console.log(tempPackage);
     }
 
     render() {
