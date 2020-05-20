@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import logoImg from "../chatsignal.png"
+import { Result } from "antd";
 
 export class Register extends React.Component {
     constructor(props) {
@@ -14,6 +15,10 @@ export class Register extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.getCity = this.getCity.bind(this);
+        this.saltAndHash = this.saltAndHash.bind(this);
+        this.handlePackage = this.handlePackage.bind(this);
+        // this.verifyHash = this.verifyHash.bind(this);
     }
 
     handleChange(event) {
@@ -49,10 +54,38 @@ export class Register extends React.Component {
         // alert('A name was submitted: ' + this.state.username);
         // alert('An email was submitted: ' + this.state.email);
         // alert('A password was submitted: ' + this.state.password);
-        alert('Your IP is: ' + this.state.ip);
-        alert('Your city is: ' + this.state.city);
+        // alert('Your IP is: ' + this.state.ip);
+        // alert('Your city is: ' + this.state.city);
         //event.preventDefault();
+        this.handlePackage();
     }
+
+    handlePackage(event) {
+        var tempPackage = {name : this.state.username, password : this.state.password};
+        console.log(tempPackage);
+    }
+
+    saltAndHash(event) {
+        let curComp = this;
+        // var plainPassword = this.state.password;
+        const bcrypt = require('bcryptjs');
+        bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(curComp.state.password, salt, function(err, hash) {
+                console.log('A password was submitted: ' + curComp.state.password);
+                console.log('This is hash: ' + hash);
+                curComp.setState({password : hash});
+                console.log('Hash password is: ' + curComp.state.password);
+            });
+        });
+    }
+
+    // verifyHash(event) {
+    //     var hash = this.state.hash;
+    //     const bcrypt = require('bcryptjs');
+    //     bcrypt.compare("123", hash, function(err, res) {
+    //         console.log('Result: ' + res);
+    //     });
+    // }
 
     render() {
         return <div className="base-container">
@@ -79,6 +112,8 @@ export class Register extends React.Component {
             <div className="footer">
             <button type="button" className="btn" onClick={()=> {
                 this.getCity();
+                this.saltAndHash();
+                // this.verifyHash();
             }}>
                 Register
             </button>
