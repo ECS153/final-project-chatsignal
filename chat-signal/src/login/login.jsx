@@ -5,6 +5,9 @@ import { message } from 'antd';
 
 //TODO: implement authentication.
 export const Login = () => {
+    const [username, getUsername] = useState(0); // react hooks
+    const [password, getPassword] = useState(0); // react hooks
+
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
@@ -20,8 +23,17 @@ export const Login = () => {
         // }
     }
 
-    const onLoginPressed = () => {
+    function handleUsername(event) {
+        getUsername(event.target.value);
+    }
 
+    function handlePassword(event) {
+        getPassword(event.target.value);
+    }
+
+    const onLoginPressed = () => {
+        var JSONpackage = {username : username, password : password}
+        console.log(JSONpackage); // here's the information in JSON format
         authLoginInfo();
 
         if (isLoginVerified) {
@@ -40,11 +52,11 @@ export const Login = () => {
                 <div className="form">
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
-                        <input type="text" name="username" placeholder="username" />
+                        <input type="text" name="username" placeholder="username" onChange = {handleUsername}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="text" name="password" placeholder="password" />
+                        <input type="text" name="password" placeholder="password" onChange = {handlePassword}/>
                     </div>
                 </div>
             </div>
