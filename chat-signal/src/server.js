@@ -24,7 +24,7 @@ function createUserInfoDB() {
   // table is compacted; not an issue here, but good practice
   const cmd =
     "CREATE TABLE UserAccInfoTable (username TEXT PRIMARY KEY, email TEXT, hash TEXT, salt TEXT, location TEXT)";
-    userInfoDB.run(cmd, function (err, val) {
+  userInfoDB.run(cmd, function (err, val) {
     if (err) {
       console.log("Database creation failure", err.message);
     } else {
