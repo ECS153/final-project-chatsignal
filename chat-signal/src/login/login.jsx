@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, Component } from "react";
 import { useHistory } from "react-router-dom";
 import logoImg from "../chatsignal.png"
 import { message } from 'antd';
+import useForceUpdate from 'use-force-update';
+import axios from 'axios';
 
 //TODO: implement authentication.
 export const Login = () => {
@@ -9,6 +11,7 @@ export const Login = () => {
     const [password, getPassword] = useState(0); // react hooks
     const [ipAddress, getIP] = useState(0); // react hooks
     const [city, getCity] = useState(0); // react hooks
+    const forceUpdate = useForceUpdate();
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
@@ -25,14 +28,6 @@ export const Login = () => {
 
     function handleUsername(event) {
         getUsername(event.target.value);
-        
-    }
-
-    function handlePassword(event) {
-        getPassword(event.target.value);
-
-    }
-    function getCityIP() {
         fetch('https://api.ipify.org?format=jsonp?callback=?', {
             method: 'GET',
             headers: {},
@@ -41,40 +36,56 @@ export const Login = () => {
             return res.text()
         }).then(ip => {
             getIP(ip);
-        },);
+        });
+    }
+    
+
+    function handlePassword(event) {
+        getPassword(event.target.value);
         var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
         fetch(endpoint)
             .then(response => response.json())
             .then(response => {
-            getCity(response.city);
+                handleCity(response.city);
             });
+            forceUpdate();  
     }
-    function callTwice() {
-        getCityIP();
-        handlePackage();
-        handlePackage();
-        getCityIP();
+    
+    useEffect(() => {
+        handlePackage();          
+    });
+    
+    function handleCity(tempCity) {
+        getCity(tempCity);
+
     }
-    // const tempCallback = useCallback(() => {
-    //     fetch('https://api.ipify.org?format=jsonp?callback=?', {
-    //         method: 'GET',
-    //         headers: {},
-    //     })
-    //     .then(res => {
-    //         return res.text()
-    //     }).then(ip => {
-    //         getIP(ip);
-    //     },);
-    //     var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
-    //     fetch(endpoint)
-    //         .then(response => response.json())
-    //         .then(response => {
-    //         getCity(response.city);
-    //         });
-    // })
+
+    function handleIP(tempIP) {
+        getIP(tempIP);
+    }
+    function getIPname() {
+        fetch('https://api.ipify.org?format=jsonp?callback=?', {
+            method: 'GET',
+            headers: {},
+        })
+        .then(res => {
+            return res.text()
+        }).then(ip => {
+            getIP(ip);
+        });
+        var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
+        fetch(endpoint)
+            .then(response => response.json())
+            .then(response => {
+                handleCity(response.city);
+            });
+            forceUpdate();  
+    }
+    
+
     
     function handlePackage() {
-        var JSONpackage = {username : username, password : password, ip : ipAddress, city : city}
+        var JSONpackage = {username : username, password : password, ip : ipAddress, location : city}
         console.log(JSONpackage); // here's the information in JSON format
     }
     
@@ -91,20 +102,30 @@ export const Login = () => {
         });
     }
 
-    
+    async function checkDB(event) {
+        
+        await axios.post(
+            'https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
+            { UserID: "username", IP: "password", Location: "ipAddress", Password: "city" }
+          );
+          console.log("successfully added to db");
+      }
+
     const onLoginPressed = () => {
 
         authLoginInfo();
 
         if (isLoginVerified) {
-            //history.push('/chatroom');
+           // history.push('/chatroom');
             message.success('Logged in successfully. Start chatting!')
         } else {
             message.error('Login failed. Please try again.');
         }
-        callTwice();
+        getIPname();
         saltAndHash();
         handlePackage();
+        checkDB();
+        
     }
     return (
         <div className="base-container">
