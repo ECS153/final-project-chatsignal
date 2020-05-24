@@ -32,13 +32,14 @@ export const Login = () => {
             method: 'GET',
             headers: {},
         })
-        .then(res => {
-            return res.text()
-        }).then(ip => {
-            getIP(ip);
-        });
+            .then(res => {
+                return res.text()
+            }).then(ip => {
+                getIP(ip);
+            });
     }
     
+
 
     function handlePassword(event) {
         getPassword(event.target.value);
@@ -48,16 +49,19 @@ export const Login = () => {
             .then(response => {
                 handleCity(response.city);
             });
-            forceUpdate();  
+        forceUpdate();
     }
-    
+
     useEffect(() => {
-        handlePackage();          
+        handlePackage();
     });
-    
+
     function handleCity(tempCity) {
         getCity(tempCity);
-
+    }
+    
+    function handleIP(tempIP) {
+        getIP(tempIP);
     }
 
     function handleIP(tempIP) {
@@ -68,32 +72,32 @@ export const Login = () => {
             method: 'GET',
             headers: {},
         })
-        .then(res => {
-            return res.text()
-        }).then(ip => {
-            getIP(ip);
-        });
+            .then(res => {
+                return res.text()
+            }).then(ip => {
+                getIP(ip);
+            });
         var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
         fetch(endpoint)
             .then(response => response.json())
             .then(response => {
                 handleCity(response.city);
             });
-            forceUpdate();  
+        forceUpdate();
     }
-    
 
-    
+
+
     function handlePackage() {
-        var JSONpackage = {username : username, password : password, ip : ipAddress, location : city}
+        var JSONpackage = { username: username, password: password, ip: ipAddress, location: city }
         console.log(JSONpackage); // here's the information in JSON format
     }
-    
+
     function saltAndHash(event) {
         // var plainPassword = this.state.password;
         const bcrypt = require('bcryptjs');
-        bcrypt.genSalt(10, function(err, salt) {
-            bcrypt.hash(password, salt, function(err, hash) {
+        bcrypt.genSalt(10, function (err, salt) {
+            bcrypt.hash(password, salt, function (err, hash) {
                 console.log('A password was submitted: ' + password);
                 console.log('This is hash: ' + hash);
                 getPassword(hash);
@@ -102,21 +106,29 @@ export const Login = () => {
         });
     }
 
+    // async function checkDB(event) {
+
+    //     await axios.post(
+    //         'https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
+    //         { UserID: "username", IP: "password", Location: "ipAddress", Password: "city" }
+    //       );
+    //       console.log("successfully added to db");
+    //   }
     async function checkDB(event) {
-        
-        await axios.post(
-            'https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-            { UserID: "username", IP: "password", Location: "ipAddress", Password: "city" }
-          );
-          console.log("successfully added to db");
-      }
+        console.log("sending post to db...")
+        axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
+            { UserID: 'Fred', IP: '23', Location: "Fremont", Password: "trololol" })
+            .then(function (response) { console.log(response); })
+
+        console.log("done sending post to db...")
+    }
 
     const onLoginPressed = () => {
 
         authLoginInfo();
 
         if (isLoginVerified) {
-           // history.push('/chatroom');
+            // history.push('/chatroom');
             message.success('Logged in successfully. Start chatting!')
         } else {
             message.error('Login failed. Please try again.');
@@ -125,7 +137,6 @@ export const Login = () => {
         saltAndHash();
         handlePackage();
         checkDB();
-        
     }
     return (
         <div className="base-container">
@@ -136,11 +147,11 @@ export const Login = () => {
                 <div className="form">
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
-                        <input type="text" name="username" placeholder="username" onChange = {handleUsername}/>
+                        <input type="text" name="username" placeholder="username" onChange={handleUsername} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="text" name="password" placeholder="password" onChange = {handlePassword}/>
+                        <input type="text" name="password" placeholder="password" onChange={handlePassword} />
                     </div>
                 </div>
             </div>
