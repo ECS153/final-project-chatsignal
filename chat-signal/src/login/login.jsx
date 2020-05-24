@@ -89,18 +89,18 @@ export const Login = () => {
         console.log(JSONpackage); // here's the information in JSON format
     }
 
-    // function saltAndHash(event) {
-    //     // var plainPassword = this.state.password;
-    //     const bcrypt = require('bcryptjs');
-    //     bcrypt.genSalt(10, function (err, salt) {
-    //         bcrypt.hash(password, salt, function (err, hash) {
-    //             console.log('A password was submitted: ' + password);
-    //             console.log('This is hash: ' + hash);
-    //             getPassword(hash);
-    //             console.log('Hash password is: ' + password);
-    //         });
-    //     });
-    // }
+    function saltAndHash(event) {
+        // var plainPassword = this.state.password;
+        const bcrypt = require('bcryptjs');
+        bcrypt.genSalt(10, function (err, salt) {
+            bcrypt.hash(password, salt, function (err, hash) {
+                console.log('A password was submitted: ' + password);
+                console.log('This is hash: ' + hash);
+                getPassword(hash);
+                console.log('Hash password is: ' + password);
+            });
+        });
+    }
 
     // async function checkDB(event) {
 
@@ -130,7 +130,7 @@ export const Login = () => {
             message.error('Login failed. Please try again.');
         }
         getIPname();
-        // saltAndHash();
+        saltAndHash();
         handlePackage();
         checkDB();
 
