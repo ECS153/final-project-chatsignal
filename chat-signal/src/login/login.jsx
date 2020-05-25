@@ -4,24 +4,12 @@ import logoImg from "../chatsignal.png"
 import { message } from 'antd';
 import useForceUpdate from 'use-force-update';
 import axios from 'axios';
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
-
-var AWS = require("aws-sdk");
-var myConfig = AWS.config.update({
-    region: "us-west-2",
-    endpoint: "https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod"
-    //endpoint: "http://localhost:3000"
-  });
-var docClient = new AWS.DynamoDB.DocumentClient();
-
-AWS.config = myConfig;
-
 
 //TODO: implement authentication.
 export const Login = () => {
     const [username, getUsername] = useState(0); // react hooks
     const [password, getPassword] = useState(0); // react hooks
-   // const [ipAddress, getIP] = useState(0); // react hooks
+    const [ipAddress, getIP] = useState(0); // react hooks
     const [city, getCity] = useState(0); // react hooks
     const forceUpdate = useForceUpdate();
     let history = useHistory();
@@ -40,62 +28,70 @@ export const Login = () => {
 
     function handleUsername(event) {
         getUsername(event.target.value);
-        
-    }
-    function handlePassword(event) {
-        getPassword(event.target.value);
-       
-    }
-
-    useEffect(() => {
-        var JSONpackage = { username: username, password: password,  location: city }
-        console.log(JSONpackage); // here's the information in JSON format
-    }, [city]);
-
-    function handleCity(event) {
         fetch('https://api.ipify.org?format=jsonp?callback=?', {
             method: 'GET',
             headers: {},
         })
-        .then(res => {
-            return res.text()
-        }).then(ip => {
-            console.log('ip', ip);
-            // getIP(ip);
-            var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
-            fetch(endpoint)
+            .then(res => {
+                return res.text()
+            }).then(ip => {
+                getIP(ip);
+            });
+    }
+    
+
+
+    function handlePassword(event) {
+        getPassword(event.target.value);
+        var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
+        fetch(endpoint)
             .then(response => response.json())
             .then(response => {
-            getCity(response.city);
+                handleCity(response.city);
             });
-        },);    
+        forceUpdate();
+    }
+
+    useEffect(() => {
+        handlePackage();
+    });
+
+    function handleCity(tempCity) {
+        getCity(tempCity);
     }
     
-
-
-    function authenticate() {
-        
-        console.log("HERE");
-        var params = { TableName: "AccountDB",
-            Key:{
-                "UserID" : username, 
-                "IP" : "0.0.0.0", 
-                "Location" : city, 
-                "Password" : password
-            } }
-        docClient.query(params, function(err, data) {
-            if (err) {
-                console.error("Invalid Password. ", JSON.stringify(err, null, 2));
-            } else {
-                console.log("Valid Password, login succeeded:", JSON.stringify(data, null, 2));
-            }
-        });
+    function handleIP(tempIP) {
+        getIP(tempIP);
     }
-    
+
+    function handleIP(tempIP) {
+        getIP(tempIP);
+    }
+    function getIPname() {
+        fetch('https://api.ipify.org?format=jsonp?callback=?', {
+            method: 'GET',
+            headers: {},
+        })
+            .then(res => {
+                return res.text()
+            }).then(ip => {
+                getIP(ip);
+            });
+        var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
+        fetch(endpoint)
+            .then(response => response.json())
+            .then(response => {
+                handleCity(response.city);
+            });
+        forceUpdate();
+    }
 
 
 
-  
+    function handlePackage() {
+        var JSONpackage = { username: username, password: password, ip: ipAddress, location: city }
+        console.log(JSONpackage); // here's the information in JSON format
+    }
 
     function saltAndHash(event) {
         // var plainPassword = this.state.password;
@@ -110,15 +106,22 @@ export const Login = () => {
         });
     }
 
-  
-    async function checkDB(event) {
-        console.log("sending post to db...")
-        axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-            { UserID: username, IP: "0.0.0.0", Location: city, Password: password })
-            .then(function (response) { console.log(response); })
+    // async function checkDB(event) {
 
-        console.log("done sending post to db...")
-    }
+    //     await axios.post(
+    //         'https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
+    //         { UserID: username, IP: "HI", Location: city , Password: "city" }
+    //       );
+    //       console.log("successfully added to db");
+    //   }
+    // async function checkDB(event) {
+    //     console.log("sending post to db...")
+    //     axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
+    //         { UserID: 'Fred', Email: '23', Location: "Fremont", Password: "trololol" })
+    //         .then(function (response) { console.log(response); })
+
+    //     console.log("done sending post to db...")
+    // }
 
     const onLoginPressed = () => {
 
@@ -130,10 +133,10 @@ export const Login = () => {
         } else {
             message.error('Login failed. Please try again.');
         }
-        handleCity();
+        getIPname();
         saltAndHash();
-        //checkDB();
-        authenticate();
+        handlePackage();
+        // checkDB();
     }
     return (
         <div className="base-container">
@@ -148,7 +151,7 @@ export const Login = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="password" name="password" placeholder="password" onChange={handlePassword} />
+                        <input type="text" name="password" placeholder="password" onChange={handlePassword} />
                     </div>
                 </div>
             </div>
