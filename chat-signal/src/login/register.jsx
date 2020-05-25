@@ -106,7 +106,7 @@ export const Register = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="text" name="password" placeholder="password" onChange={handlePassword}/>
+                        <input type="password" name="password" placeholder="password" onChange={handlePassword}/>
                     </div>
                 </div>
             </div>
