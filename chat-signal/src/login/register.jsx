@@ -2,19 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import logoImg from "../chatsignal.png"
 import { message } from 'antd';
-import useForceUpdate from 'use-force-update';
 import axios from 'axios';
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-var AWS = require("aws-sdk");
-var myConfig = AWS.config.update({
-    region: "us-west-2",
-    endpoint: "https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod"
-    //endpoint: "http://localhost:3000"
-  });
-var docClient = new AWS.DynamoDB.DocumentClient();
-
-AWS.config = myConfig;
 
 export const Register = () => {
     const [username, getUsername] = useState(0); // react hooks
@@ -84,13 +74,16 @@ export const Register = () => {
     }
 
     useEffect(() => {
-        handlePackage(); 
+        handlePackage();
+        if (city != "") {
+            addDB();
+        }
     }, [city]);
 
     async function addDB(event) {
         console.log("sending post to db...")
         axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-            { UserID: username, Location: city, Password: password, Email: email })
+            { UserID: username, Email: email, Location: city, Password: password })
             .then(function (response) { console.log(response); })
 
         console.log("done sending post to db...")
@@ -99,8 +92,6 @@ export const Register = () => {
     const onRegPressed = () => {
         saltAndHash();
         handleCity();
-        addDB();
-
         if (regSuccess) {
             //history.push('/chatroom');
             message.success('Successfully registered. Please log in!')
