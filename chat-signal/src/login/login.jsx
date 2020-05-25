@@ -4,6 +4,20 @@ import logoImg from "../chatsignal.png"
 import { message } from 'antd';
 import useForceUpdate from 'use-force-update';
 import axios from 'axios';
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
+
+var AWS = require("aws-sdk");
+aws_access_key_id = AKIAUGOGGDYPDWITXGMT;
+aws_secret_access_key = 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;
+var myConfig = AWS.config.update({
+    aws_access_key_id : "AKIAUGOGGDYPCSPZ5RB6",
+    region: "us-west-2",
+    endpoint: "https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod"
+  });
+var docClient = new AWS.DynamoDB.DocumentClient();
+var hash;
+AWS.config = myConfig;
+
 
 //TODO: implement authentication.
 export const Login = () => {
@@ -28,46 +42,21 @@ export const Login = () => {
 
     function handleUsername(event) {
         getUsername(event.target.value);
-        fetch('https://api.ipify.org?format=jsonp?callback=?', {
-            method: 'GET',
-            headers: {},
-        })
-            .then(res => {
-                return res.text()
-            }).then(ip => {
-                getIP(ip);
-            });
+        
     }
     
-
-
     function handlePassword(event) {
         getPassword(event.target.value);
-        var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(response => {
-                handleCity(response.city);
-            });
-        forceUpdate();
+       
     }
 
     useEffect(() => {
-        handlePackage();
-    });
+        var JSONpackage = { username: username, password: password, ip: ipAddress, location: city }
+        console.log(JSONpackage); // here's the information in JSON format
+    }, [city]);
 
     function handleCity(tempCity) {
         getCity(tempCity);
-    }
-    
-    function handleIP(tempIP) {
-        getIP(tempIP);
-    }
-
-    function handleIP(tempIP) {
-        getIP(tempIP);
-    }
-    function getIPname() {
         fetch('https://api.ipify.org?format=jsonp?callback=?', {
             method: 'GET',
             headers: {},
@@ -83,45 +72,46 @@ export const Login = () => {
             .then(response => {
                 handleCity(response.city);
             });
-        forceUpdate();
     }
+    
+    
 
-
-
-    function handlePackage() {
-        var JSONpackage = { username: username, password: password, ip: ipAddress, location: city }
-        console.log(JSONpackage); // here's the information in JSON format
-    }
-
-    function saltAndHash(event) {
-        // var plainPassword = this.state.password;
-        const bcrypt = require('bcryptjs');
-        bcrypt.genSalt(10, function (err, salt) {
-            bcrypt.hash(password, salt, function (err, hash) {
-                console.log('A password was submitted: ' + password);
-                console.log('This is hash: ' + hash);
-                getPassword(hash);
-                console.log('Hash password is: ' + password);
-            });
+    function authenticate() {
+        var trueFalse = verifyHash();
+        console.log("HERE");
+        if (trueFalse){
+            isLoginVerified = true;
+        }
+        console.log(isLoginVerified);
+        var params = { TableName: "AccountDB",
+            Key:{
+                "UserID" : "Jason", 
+                "Email" : "jason@gmail.com", 
+                "Location" : "Singapore", 
+                "Password" : "$2a$10$fs7pMJBwBUHx/twmteN20u/20E4/Fkfv/0Qy3RUbuzkXD5.dXzssm"
+            } }
+        docClient.query(params, function(err, data) {
+            if (err) {
+                console.error("Invalid Password. ", JSON.stringify(err, null, 2));
+            } else {
+                console.log("Valid Password, login succeeded:", JSON.stringify(data, null, 2));
+            }
         });
     }
-
-    // async function checkDB(event) {
-
-    //     await axios.post(
-    //         'https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-    //         { UserID: username, IP: "HI", Location: city , Password: "city" }
-    //       );
-    //       console.log("successfully added to db");
-    //   }
-    // async function checkDB(event) {
-    //     console.log("sending post to db...")
-    //     axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-    //         { UserID: 'Fred', Email: '23', Location: "Fremont", Password: "trololol" })
-    //         .then(function (response) { console.log(response); })
-
-    //     console.log("done sending post to db...")
-    // }
+    
+    function verifyHash(event) {
+        var hash = "$2a$10$fs7pMJBwBUHx/twmteN20u/20E4/Fkfv/0Qy3RUbuzkXD5.dXzssm";
+        const bcrypt = require('bcryptjs');
+        bcrypt.compare(password, hash, function(err, res) {
+            //console.log('Result: ' + res);
+            if(res) {
+                console.log("True");
+                return res;
+            } else {
+                console.log("False");
+            }
+        });
+    }
 
     const onLoginPressed = () => {
 
@@ -133,10 +123,8 @@ export const Login = () => {
         } else {
             message.error('Login failed. Please try again.');
         }
-        getIPname();
-        saltAndHash();
-        handlePackage();
-        // checkDB();
+        handleCity();    
+        authenticate();
     }
     return (
         <div className="base-container">
@@ -151,7 +139,7 @@ export const Login = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="text" name="password" placeholder="password" onChange={handlePassword} />
+                        <input type="password" name="password" placeholder="password" onChange={handlePassword} />
                     </div>
                 </div>
             </div>
