@@ -6,13 +6,13 @@ class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoginActive: false
+      isLoginActive: true
     };
   }
 
   componentDidMount() {
-    //Left default -> Register page
-    this.rightSide.classList.add("left");
+    //Right default -> Login page
+    this.rightSide.classList.add("right");
   }
 
   changeState() {
