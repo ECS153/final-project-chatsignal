@@ -4,6 +4,18 @@ import logoImg from "../chatsignal.png"
 import { message } from 'antd';
 import useForceUpdate from 'use-force-update';
 import axios from 'axios';
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
+
+var AWS = require("aws-sdk");
+var myConfig = AWS.config.update({
+    region: "us-west-2",
+    endpoint: "https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod"
+    //endpoint: "http://localhost:3000"
+  });
+var docClient = new AWS.DynamoDB.DocumentClient();
+
+AWS.config = myConfig;
+
 
 //TODO: implement authentication.
 export const Login = () => {
@@ -28,6 +40,34 @@ export const Login = () => {
 
     function handleUsername(event) {
         getUsername(event.target.value);
+        
+    }
+    
+
+
+    function handlePassword(event) {
+        getPassword(event.target.value);
+       
+    }
+
+    useEffect(() => {
+        handlePackage();
+    }, [city]);
+
+    function handleCity(tempCity) {
+        getCity(tempCity);
+        
+        var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
+        fetch(endpoint)
+            .then(response => response.json())
+            .then(response => {
+                handleCity(response.city);
+            });
+        forceUpdate();
+    }
+    
+    function handleIP(tempIP) {
+        getIP(tempIP);
         fetch('https://api.ipify.org?format=jsonp?callback=?', {
             method: 'GET',
             headers: {},
@@ -38,34 +78,29 @@ export const Login = () => {
                 getIP(ip);
             });
     }
-    
-
-
-    function handlePassword(event) {
-        getPassword(event.target.value);
-        var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(response => {
-                handleCity(response.city);
-            });
-        forceUpdate();
-    }
-
-    useEffect(() => {
-        handlePackage();
-    });
-
-    function handleCity(tempCity) {
-        getCity(tempCity);
-    }
-    
-    function handleIP(tempIP) {
-        getIP(tempIP);
-    }
 
     function handleIP(tempIP) {
         getIP(tempIP);
+    }
+
+
+    function authenticate() {
+        
+        console.log("HERE");
+        var params = { TableName: "AccountDB",
+            Key:{
+                "UserID" : username, 
+                "IP" : ipAddress, 
+                "Location" : city, 
+                "Password" : password
+            } }
+        docClient.query(params, function(err, data) {
+            if (err) {
+                console.error("Invalid Password. ", JSON.stringify(err, null, 2));
+            } else {
+                console.log("Valid Password, login succeeded:", JSON.stringify(data, null, 2));
+            }
+        });
     }
     function getIPname() {
         fetch('https://api.ipify.org?format=jsonp?callback=?', {
@@ -117,7 +152,7 @@ export const Login = () => {
     async function checkDB(event) {
         console.log("sending post to db...")
         axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-            { UserID: 'Fred', IP: '23', Location: "Fremont", Password: "trololol" })
+            { UserID: username, IP: ipAddress, Location: city, Password: password })
             .then(function (response) { console.log(response); })
 
         console.log("done sending post to db...")
@@ -136,7 +171,8 @@ export const Login = () => {
         getIPname();
         saltAndHash();
         handlePackage();
-        checkDB();
+        //checkDB();
+        authenticate();
     }
     return (
         <div className="base-container">
@@ -151,7 +187,7 @@ export const Login = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="text" name="password" placeholder="password" onChange={handlePassword} />
+                        <input type="password" name="password" placeholder="password" onChange={handlePassword} />
                     </div>
                 </div>
             </div>
