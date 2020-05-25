@@ -21,7 +21,7 @@ AWS.config = myConfig;
 export const Login = () => {
     const [username, getUsername] = useState(0); // react hooks
     const [password, getPassword] = useState(0); // react hooks
-    const [ipAddress, getIP] = useState(0); // react hooks
+   // const [ipAddress, getIP] = useState(0); // react hooks
     const [city, getCity] = useState(0); // react hooks
     const forceUpdate = useForceUpdate();
     let history = useHistory();
@@ -42,46 +42,35 @@ export const Login = () => {
         getUsername(event.target.value);
         
     }
-    
-
-
     function handlePassword(event) {
         getPassword(event.target.value);
        
     }
 
     useEffect(() => {
-        handlePackage();
+        var JSONpackage = { username: username, password: password,  location: city }
+        console.log(JSONpackage); // here's the information in JSON format
     }, [city]);
 
-    function handleCity(tempCity) {
-        getCity(tempCity);
-        
-        var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(response => {
-                handleCity(response.city);
-            });
-        forceUpdate();
-    }
-    
-    function handleIP(tempIP) {
-        getIP(tempIP);
+    function handleCity(event) {
         fetch('https://api.ipify.org?format=jsonp?callback=?', {
             method: 'GET',
             headers: {},
         })
-            .then(res => {
-                return res.text()
-            }).then(ip => {
-                getIP(ip);
+        .then(res => {
+            return res.text()
+        }).then(ip => {
+            console.log('ip', ip);
+            // getIP(ip);
+            var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
+            fetch(endpoint)
+            .then(response => response.json())
+            .then(response => {
+            getCity(response.city);
             });
+        },);    
     }
-
-    function handleIP(tempIP) {
-        getIP(tempIP);
-    }
+    
 
 
     function authenticate() {
@@ -90,7 +79,7 @@ export const Login = () => {
         var params = { TableName: "AccountDB",
             Key:{
                 "UserID" : username, 
-                "IP" : ipAddress, 
+                "IP" : "0.0.0.0", 
                 "Location" : city, 
                 "Password" : password
             } }
@@ -102,31 +91,11 @@ export const Login = () => {
             }
         });
     }
-    function getIPname() {
-        fetch('https://api.ipify.org?format=jsonp?callback=?', {
-            method: 'GET',
-            headers: {},
-        })
-            .then(res => {
-                return res.text()
-            }).then(ip => {
-                getIP(ip);
-            });
-        var endpoint = "http://ip-api.com/json/" + ipAddress + "?fields=city";
-        fetch(endpoint)
-            .then(response => response.json())
-            .then(response => {
-                handleCity(response.city);
-            });
-        forceUpdate();
-    }
+    
 
 
 
-    function handlePackage() {
-        var JSONpackage = { username: username, password: password, ip: ipAddress, location: city }
-        console.log(JSONpackage); // here's the information in JSON format
-    }
+  
 
     function saltAndHash(event) {
         // var plainPassword = this.state.password;
@@ -141,18 +110,11 @@ export const Login = () => {
         });
     }
 
-    // async function checkDB(event) {
-
-    //     await axios.post(
-    //         'https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-    //         { UserID: "username", IP: "password", Location: "ipAddress", Password: "city" }
-    //       );
-    //       console.log("successfully added to db");
-    //   }
+  
     async function checkDB(event) {
         console.log("sending post to db...")
         axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-            { UserID: username, IP: ipAddress, Location: city, Password: password })
+            { UserID: username, IP: "0.0.0.0", Location: city, Password: password })
             .then(function (response) { console.log(response); })
 
         console.log("done sending post to db...")
@@ -168,9 +130,8 @@ export const Login = () => {
         } else {
             message.error('Login failed. Please try again.');
         }
-        getIPname();
+        handleCity();
         saltAndHash();
-        handlePackage();
         //checkDB();
         authenticate();
     }
