@@ -1,0 +1,67 @@
+AWS/React Documentation
+
+EC2 Basics:
+
+-Update React APP:
+
+-SSH into our instance
+	-ssh Public DNS -i ./YOUR_KEY_PAIR
+	-Public DNS will change after each shut off. Key pair can only be download once: during setup of the intance so make sure you download it and save it.
+	-example: ssh ec2-user@ec2-3-14-79-186.us-east-2.compute.amazonaws.com -i ./ECS153ChatSignalAWSkeypair.pem
+
+-Go to chat-signal dir
+	-cd /home/ec2-user/ChatSignal/final-project-chatsignal/chat-signal
+	-git pull
+
+-Create a React production build 
+	-npm run build
+
+-Copy the newly created "build" directory to public
+	-cp -aR ./build ./public/
+
+-Reroute AWS's port 80 to our app's port 3000 (because port <1024 will require root access)
+	-This has to be done everytime the machine is restarted
+	-sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 3000
+
+-Start the server to serve index.html
+	-node server.js
+
+-To test the web app, find IPv4 on EC2 console. This IP will change after each time the machine is shut dwon 
+
+-React APP deploy reference:
+	https://medium.com/@adhasmana/how-to-quickly-deploy-react-and-node-app-on-aws-80e5dfe7d86e
+
+-React deployment: A better, automated workflow:
+	https://medium.com/@adhasmana/how-to-deploy-react-and-node-app-on-aws-a-better-approach-5b22e2ed2da2
+
+------------------------------------------------------------------------------------------------------
+
+WebSocket Basics:
+
+-Amazon Tutorial: 
+	https://www.youtube.com/watch?v=3SCdzzD0PdQ&fbclid=IwAR2VhraOz4oBmefacNMj7zclWugvqWiodBuehIFIWXyA4il6FyRO4CyU8Cg
+
+-POST to webSocket connection:
+	https://www.freecodecamp.org/news/real-time-applications-using-websockets-with-aws-api-gateway-and-lambda-a5bb493e9452/?fbclid=IwAR1oGThgKcZBl80F3ViosR4s53OgNRz3XdPLkrUp8cBQh_NZ8-CzdO6rHMA
+
+------------------------------------------------------------------------------------------------------
+
+IAM V4 Signature References:
+
+-Original Amazon Documentation:
+	https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html?fbclid=IwAR2YowjWI4ryCQNAiLtZk__gmwiLpXLL7s9_xfd8mUxUc7wrAeFr_ipsPOQ
+
+-Request Signer: 
+	https://gist.github.com/davidkelley/c1274cffdc0d9d782d7e?fbclid=IwAR2glMMAigMbS6MbR_Io-z0f7OHuXxJN9NdZBKgZ1E4OKLl7Ql3NEb76PTw
+
+------------------------------------------------------------------------------------------------------
+
+Debugging lambda function:
+	-CloudWatch -> Log Groups
+
+------------------------------------------------------------------------------------------------------
+
+General Debugging:
+	-Can't find EC2 instance? Can't find lambda function?
+	-Check if the REGION is correct
+	-Check permission by checking each service's role and that role's attached policies
