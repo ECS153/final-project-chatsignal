@@ -9,6 +9,10 @@ connection.onerror = (error) => {
   console.log(`WebSocket error: ${error}`);
 };
 
+connection.onmessage = (e) => {
+  console.log("DATA" + e.data);
+};
+
 export const sendMsg = (message) => {
   connection.send(
     `{"action": "onMessage", "message": "${message.toString()}"}`

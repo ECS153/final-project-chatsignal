@@ -7,11 +7,11 @@ import { sendMsg, handleChange } from "./webSocket";
 let message = "We've made it";
 
 function App() {
-  const [message, getMsg] = useState(0);
+  // const [message, setMsg] = useState(0);
 
-  function handleChange(event) {
-    getMsg(event.target.value);
-  }
+  // function handleChange(event) {
+  //   setMsg(event.target.value);
+  // }
 
   return (
     // Add css styling like below
@@ -21,12 +21,12 @@ function App() {
         <Route path="/chatroom" component={ChatRoom} />
         <Route component={LoginPage} />
       </Switch>
-      <input
+      {/* <input
         type="text"
         placeholder="Enter Message"
         onChange={handleChange}
       ></input>
-      <button onClick={() => sendMsg(message)}>SEND MSG TEST BTN</button>
+      <button onClick={() => sendMsg(message)}>SEND MSG TEST BTN</button> */}
     </div>
   );
 }
