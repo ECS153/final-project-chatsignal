@@ -7,22 +7,22 @@ const ChatRoom = () => {
     { initial: "A", name: "Andy Wu", status: "User is typing..." },
     { initial: "C", name: "Corbin Harell", status: "1 New Message" },
     { initial: "J", name: "Jason Lin", status: "User is typing..." },
+    { initial: "N", name: "Nathan Ng", status: "User is typing..." },
   ]);
   // default to chatting with first person on contact list
   const [selectedChatterIndex, setSelectedChatterIndex] = useState(2);
 
-  const onContactPressed = selected => {
-    console.log(`Updating chatter from index ${selectedChatterIndex} to ${selected}...`)
+  const onContactPressed = (selected) => {
+    console.log(
+      `Updating chatter from index ${selectedChatterIndex} to ${selected}...`
+    );
     setSelectedChatterIndex(selected);
   };
 
   return (
     <div style={Styles.MainContainer}>
       <div style={Styles.leftContainer}>
-        <ContactsSidebar
-          contacts={contacts}
-          updateChatter={onContactPressed}
-        />
+        <ContactsSidebar contacts={contacts} updateChatter={onContactPressed} />
       </div>
       <div style={Styles.rightContainer}>
         <Chatbox chatter={contacts[selectedChatterIndex]} />
