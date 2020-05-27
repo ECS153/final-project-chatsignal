@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import MsgInputBox from "./MsgInputBox.jsx";
-import ContactCell from "./ContactCell.jsx";
 import "antd/dist/antd.css";
 import { Button } from "antd";
+
+import { forwardMsg } from "../webSocket";
 
 const MessageCell = (props) => (
   <div style={props.style}>
@@ -16,48 +17,48 @@ const MessageCell = (props) => (
   </div>
 );
 
-const MsgHistoryBox = (props) => {
-  const [msgs, setMsgs] = useState([
-    { type: "external", content: "Hello how are you bro?" },
-    { type: "external", content: "what u up to" },
-    { type: "self", content: "Hey bro" },
-    { type: "external", content: "HIIIIIIIIIII" },
-    { type: "self", content: "This is a filler message" },
-    { type: "external", content: "This is a filler message" },
-    { type: "self", content: "This is a filler message" },
-    { type: "external", content: "This is a filler message" },
-    { type: "self", content: "This is a filler message" },
-    { type: "external", content: "This is a filler message" },
-    { type: "self", content: "This is a filler message" },
-    { type: "external", content: "This is a filler message" },
-    { type: "self", content: "This is a filler message" },
-    { type: "external", content: "This is a filler message" },
-    { type: "self", content: "This is a filler message" },
-    { type: "external", content: "This is a filler message" },
-    { type: "self", content: "This is a filler message" },
-    { type: "external", content: "This is a filler message" },
-    { type: "self", content: "This is a filler message" },
-    { type: "external", content: "Ok gtg, bye!" },
-    { type: "self", content: "Ok Ill talk to you later" },
-  ]);
+class MsgHistoryBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      msgs: [],
+      count: 0,
+      delay: 1000,
+    };
+  }
 
-  return (
-    <div style={Styles.ChatboxContainer}>
-      {msgs.map((msg) => (
-        <MessageCell
-          style={
-            msg.type == "external"
-              ? Styles.externalMessageStyle
-              : Styles.ownMessageStyle
-          }
-          content={msg.content}
-          chatter={props.chatter}
-          showAvatar={msg.type == "external" ? true : false}
-        />
-      ))}
-    </div>
-  );
-};
+  componentDidMount() {
+    console.log("MOUNT");
+    this.interval = setInterval(this.tick, this.state.delay);
+  }
+
+  tick = () => {
+    this.setState({
+      count: this.state.count + 1,
+      msgs: forwardMsg(),
+    });
+    console.log(this.state.msgs);
+  };
+
+  render() {
+    return (
+      <div style={Styles.ChatboxContainer}>
+        {this.state.msgs.map((msg) => (
+          <MessageCell
+            style={
+              msg.type === "external"
+                ? Styles.externalMessageStyle
+                : Styles.ownMessageStyle
+            }
+            content={msg.content}
+            chatter={this.props.chatter}
+            showAvatar={msg.type === "external" ? true : false}
+          />
+        ))}
+      </div>
+    );
+  }
+}
 
 const Chatbox = (props) => {
   console.log(props.chatter); // chatter is the person you currently selected to chat with
@@ -107,7 +108,7 @@ const Styles = {
   },
   endConnectionButtonStyle: {
     fontFamily: "Karla",
-    borderRadius: 6
+    borderRadius: 6,
   },
   blubStyle: {
     display: "flex",
@@ -160,3 +161,28 @@ const Styles = {
 };
 
 export default Chatbox;
+
+// console.log(forwardMsg());
+// const [msgs, setMsgs] = useState([
+// { type: "external", content: "Hello how are you bro?" },
+// { type: "external", content: "what u up to" },
+// { type: "self", content: "Hey bro" },
+// { type: "external", content: "HIIIIIIIIIII" },
+// { type: "self", content: "This is a filler message" },
+// { type: "external", content: "This is a filler message" },
+// { type: "self", content: "This is a filler message" },
+// { type: "external", content: "This is a filler message" },
+// { type: "self", content: "This is a filler message" },
+// { type: "external", content: "This is a filler message" },
+// { type: "self", content: "This is a filler message" },
+// { type: "external", content: "This is a filler message" },
+// { type: "self", content: "This is a filler message" },
+// { type: "external", content: "This is a filler message" },
+// { type: "self", content: "This is a filler message" },
+// { type: "external", content: "This is a filler message" },
+// { type: "self", content: "This is a filler message" },
+// { type: "external", content: "This is a filler message" },
+// { type: "self", content: "This is a filler message" },
+// { type: "external", content: "Ok gtg, bye!" },
+// { type: "self", content: "Ok Ill talk to you later" },
+// ]);

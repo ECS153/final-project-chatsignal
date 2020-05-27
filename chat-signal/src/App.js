@@ -1,18 +1,11 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import LoginPage from "./login/LoginPage";
 import ChatRoom from "./ChatRoom/index.jsx";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { sendMsg, handleChange } from "./webSocket";
+import { Route, Switch } from "react-router-dom";
 
 let message = "We've made it";
 
 function App() {
-  // const [message, setMsg] = useState(0);
-
-  // function handleChange(event) {
-  //   setMsg(event.target.value);
-  // }
-
   return (
     // Add css styling like below
     <div>
@@ -21,12 +14,6 @@ function App() {
         <Route path="/chatroom" component={ChatRoom} />
         <Route component={LoginPage} />
       </Switch>
-      {/* <input
-        type="text"
-        placeholder="Enter Message"
-        onChange={handleChange}
-      ></input>
-      <button onClick={() => sendMsg(message)}>SEND MSG TEST BTN</button> */}
     </div>
   );
 }
