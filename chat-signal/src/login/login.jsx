@@ -10,26 +10,12 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 export const Login = () => {
     const [username, getUsername] = useState(0); // react hooks
     const [password, getPassword] = useState(0); // react hooks
-    const [ipAddress, getIP] = useState(0); // react hooks
     const [city, getCity] = useState(0); // react hooks
-    const [tasks, getTasks] = useState(0); // react hooks
-    const [verified, getVerified] = useState(0);
-    const [tempPassword, getTempPassword] = useState(0);
 
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
     let retrieveUser = "";
-
-    //TODO: implement authentication in authLoginInfo() below
-    const authLoginInfo = () => {
-
-        //if auth succeed
-        isLoginVerified = true;
-        //else{
-        //     isLoginVerified = false;
-        // }
-    }
 
     function handleUsername(event) {
         getUsername(event.target.value);
@@ -38,9 +24,9 @@ export const Login = () => {
     function handlePassword(event) {
         getPassword(event.target.value);
     }
-    
-    function handleTasks(event) {
-        getTasks(event.target.value);
+
+    const onLoginPressed = () => {
+        handleCity(); 
     }
 
     async function fetchUserInfo(event){
@@ -54,51 +40,50 @@ export const Login = () => {
               }
         })
         .then(function (response) {
-            getTempPassword(response.data.Item["Password"]["S"]);
-    
+            var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
+            var locVerified = verifyLocation(response.data.Item["Location"]["S"])
+            if (pwVerified && locVerified) {
+                isLoginVerified = true;
+            }
+            console.log("Everything verified? " + isLoginVerified)
         })
-        
+        .then(response => {checkVerified()});
         console.log("done sending post to db...")
     }
 
-    
-
-    useEffect(() => {
-       // var JSONpackage = { username: username, password: password, location: city }
-       
-
-        if (city != "") {
-            authenticate();
-            verifyHash(tempPassword);
-        console.log("verified is " + verified);
-        }
-        
-    }, [city, verified]);
-    
-    function handleCity(tempCity) {
-        getCity(tempCity);
+    function handleCity(event) {
         fetch('https://api.ipify.org?format=jsonp?callback=?', {
             method: 'GET',
             headers: {},
         })
-            .then(res => {
-                return res.text()
-            }).then(ip => {
-                var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
-                fetch(endpoint)
-                    .then(response => response.json())
-                    .then(response => {
-                        handleCity(response.city);
-                    });
+        .then(res => {
+            return res.text()
+        }).then(ip => {
+            var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
+            fetch(endpoint)
+            .then(response => response.json())
+            .then(response => {
+                // Reset City to trigger useeffect everytime login is pressed
+                getCity("");
+                getCity(response.city);
             });
-        
+        },);    
     }
-    
-    
 
-    function authenticate() {
-        fetchUserInfo();
-        
+    useEffect(() => {
+       // var JSONpackage = { username: username, password: password, location: city }
+        if (city != "") {
+            fetchUserInfo();
+        }
+    }, [city]);
+    
+    function checkVerified(event) {
+        if (isLoginVerified) {
+            message.success('Logged in successfully. Start chatting!')
+            history.push('/chatroom');
+        } else {
+            message.error('Login failed. Please try again.');
+        }
     }
     
     function verifyHash(hash) {
@@ -106,30 +91,19 @@ export const Login = () => {
         console.log("hash is " + hash);
         console.log("password is " + password);
         const bcrypt = require('bcryptjs');
-        bcrypt.compare(password, hash, function(err, res) {
-            //console.log('Result: ' + res);
-            if(res) {
-                getVerified(true);
-               // return true;
-            } else {
-                getVerified(false);
-               // return false;
-            }
-        });
+        return bcrypt.compareSync(password, hash);
     }
 
-    const onLoginPressed = () => {
-
-        authLoginInfo();
-
-        if (isLoginVerified) {
-            //history.push('/chatroom');
-            message.success('Logged in successfully. Start chatting!')
+    function verifyLocation(loc) {
+        console.log("last loc is " + loc);
+        console.log("current loc is " + city);
+        if (loc == city) {
+            return true;
         } else {
-            message.error('Login failed. Please try again.');
+            return false;
         }
-        handleCity();    
     }
+
     return (
         <div className="base-container">
             <div className="content">
