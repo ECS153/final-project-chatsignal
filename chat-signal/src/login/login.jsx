@@ -18,7 +18,6 @@ export const Login = () => {
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
     let retrieveUser = "";
-
     //TODO: implement authentication in authLoginInfo() below
     const authLoginInfo = () => {
 
@@ -41,16 +40,27 @@ export const Login = () => {
         getTasks(event.target.value);
     }
 
-    function fetchUserInfo(){
-        var request = fetch('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',{
-            method: 'GET',
-            headers:{},
+    async function fetchUserInfo(event){
+        var accountInfo;
+        console.log("sending post to db...")
+        console.log(username)
+        await axios.get('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
+        {
+            params: {
+                UserID : username
+              }
         })
-        .then(response => response.json())
-        .then(response => {
-            console.log(response.body);
-            // handleTasks(response.tasks);
-        });
+        .then(function (response) {
+            accountInfo = response.data.Item;
+            // console.log(response.data.Item);
+        })
+        console.log(accountInfo);
+        if (await verifyHash() == 1) {
+            console.log("YAY");
+        } else {
+            console.log("BOO");
+        }
+        console.log("done sending post to db...")
     }
 
     useEffect(() => {
@@ -84,40 +94,40 @@ export const Login = () => {
 
     function authenticate() {
         fetchUserInfo();
-        var trueFalse = verifyHash();
-        console.log("HERE");
-        if (trueFalse){
-            isLoginVerified = true;
-        }
-        console.log(isLoginVerified);
-        console.log("I made it here");
+        // var trueFalse = verifyHash();
+        // console.log("HERE");
+        // if (trueFalse){
+        //     isLoginVerified = true;
+        // }
+        // console.log(isLoginVerified);
+        // console.log("I made it here");
     }
     
     function verifyHash(event) {
-        var hash = "$2a$10$fs7pMJBwBUHx/twmteN20u/20E4/Fkfv/0Qy3RUbuzkXD5.dXzssm";
+        var hash = "$2a$10$MVaoN0yu00W61En9XUwxGOGHkaPDHXeRLHVRKcRxv19FU4nnG1k4u";
         const bcrypt = require('bcryptjs');
         bcrypt.compare(password, hash, function(err, res) {
             //console.log('Result: ' + res);
             if(res) {
-                console.log("True");
-                return res;
+                console.log("True verify");
+                return 1;
             } else {
-                console.log("False");
+                console.log("False verify");
+                return 0;
             }
         });
     }
 
     const onLoginPressed = () => {
-
+        handleCity(); 
         authLoginInfo();
 
         if (isLoginVerified) {
-            history.push('/chatroom');
+            // history.push('/chatroom');
             message.success('Logged in successfully. Start chatting!')
         } else {
             message.error('Login failed. Please try again.');
         }
-        handleCity();    
     }
     return (
         <div className="base-container">
