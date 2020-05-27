@@ -3,8 +3,6 @@ import LoginPage from "./login/LoginPage";
 import ChatRoom from "./ChatRoom/index.jsx";
 import { Route, Switch } from "react-router-dom";
 
-let message = "We've made it";
-
 function App() {
   return (
     // Add css styling like below

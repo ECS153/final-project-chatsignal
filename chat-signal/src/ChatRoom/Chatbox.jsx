@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-
-import MsgInputBox from "./MsgInputBox.jsx";
+import React from "react";
 import "antd/dist/antd.css";
 import { Button } from "antd";
-
-import { forwardMsg, disconnect } from "../webSocket";
+import MsgInputBox from "./MsgInputBox.jsx";
+import { fetchMsgHistory, disconnect } from "../webSocket";
 
 const MessageCell = (props) => (
   <div style={props.style}>
@@ -21,29 +19,28 @@ class MsgHistoryBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      msgs: [],
+      msgHistory: [],
       count: 0,
       delay: 1000,
     };
   }
 
   componentDidMount() {
-    console.log("MOUNT");
     this.interval = setInterval(this.tick, this.state.delay);
   }
 
+  //  Every 1 second, fetch the up-to-date message history and increment the counter
   tick = () => {
     this.setState({
       count: this.state.count + 1,
-      msgs: forwardMsg(),
+      msgHistory: fetchMsgHistory(),
     });
-    console.log(this.state.msgs);
   };
 
   render() {
     return (
       <div style={Styles.ChatboxContainer}>
-        {this.state.msgs.map((msg) => (
+        {this.state.msgHistory.map((msg) => (
           <MessageCell
             style={
               msg.type === "external"
