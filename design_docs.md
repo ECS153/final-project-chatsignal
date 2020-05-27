@@ -4,6 +4,8 @@
 2. Nathan
 
 3. Andy
+  Documentation for the client side (front-end) of our project
+  https://docs.google.com/document/d/1DZMWIfRiZzH5O9jc5KicVa0smpjdqXPpom0V3uSBFFk/edit?usp=sharing
 
 4. David
   Websocket connection and data flow
