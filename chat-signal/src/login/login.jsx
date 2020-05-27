@@ -13,7 +13,9 @@ export const Login = () => {
     const [ipAddress, getIP] = useState(0); // react hooks
     const [city, getCity] = useState(0); // react hooks
     const [tasks, getTasks] = useState(0); // react hooks
-    const forceUpdate = useForceUpdate();
+    const [verified, getVerified] = useState(0);
+    const [tempPassword, getTempPassword] = useState(0);
+
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
@@ -41,26 +43,38 @@ export const Login = () => {
         getTasks(event.target.value);
     }
 
-    function fetchUserInfo(){
-        var request = fetch('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',{
-            method: 'GET',
-            headers:{},
+    async function fetchUserInfo(event){
+        var tempPW;
+        console.log("sending post to db...")
+        console.log(username)
+        await axios.get('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
+        {
+            params: {
+                UserID : username
+              }
         })
-        .then(response => response.json())
-        .then(response => {
-            console.log(response.body);
-            // handleTasks(response.tasks);
-        });
+        .then(function (response) {
+            getTempPassword(response.data.Item["Password"]["S"]);
+    
+        })
+        
+        console.log("done sending post to db...")
     }
 
+    
+
     useEffect(() => {
-        var JSONpackage = { username: username, password: password, location: city }
-        console.log(JSONpackage); // here's the information in JSON format
+       // var JSONpackage = { username: username, password: password, location: city }
+       
+
         if (city != "") {
             authenticate();
+            verifyHash(tempPassword);
+        console.log("verified is " + verified);
         }
-    }, [city]);
-
+        
+    }, [city, verified]);
+    
     function handleCity(tempCity) {
         getCity(tempCity);
         fetch('https://api.ipify.org?format=jsonp?callback=?', {
@@ -84,25 +98,22 @@ export const Login = () => {
 
     function authenticate() {
         fetchUserInfo();
-        var trueFalse = verifyHash();
-        console.log("HERE");
-        if (trueFalse){
-            isLoginVerified = true;
-        }
-        console.log(isLoginVerified);
-        console.log("I made it here");
+        
     }
     
-    function verifyHash(event) {
-        var hash = "$2a$10$fs7pMJBwBUHx/twmteN20u/20E4/Fkfv/0Qy3RUbuzkXD5.dXzssm";
+    function verifyHash(hash) {
+        //var hash = "$2a$10$fs7pMJBwBUHx/twmteN20u/20E4/Fkfv/0Qy3RUbuzkXD5.dXzssm";
+        console.log("hash is " + hash);
+        console.log("password is " + password);
         const bcrypt = require('bcryptjs');
         bcrypt.compare(password, hash, function(err, res) {
             //console.log('Result: ' + res);
             if(res) {
-                console.log("True");
-                return res;
+                getVerified(true);
+               // return true;
             } else {
-                console.log("False");
+                getVerified(false);
+               // return false;
             }
         });
     }
@@ -112,7 +123,7 @@ export const Login = () => {
         authLoginInfo();
 
         if (isLoginVerified) {
-            history.push('/chatroom');
+            //history.push('/chatroom');
             message.success('Logged in successfully. Start chatting!')
         } else {
             message.error('Login failed. Please try again.');
