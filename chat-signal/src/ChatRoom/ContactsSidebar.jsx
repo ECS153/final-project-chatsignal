@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import ContactCell from "./ContactCell.jsx";
 
 class ContactsSidebar extends Component {
-  state = {
-    contacts: [...this.props.contacts],
-  };
+  state = { contacts: [...this.props.contacts] };
   render() {
     return (
       <React.Fragment style={Styles.mainContainer}>

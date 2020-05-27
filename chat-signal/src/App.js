@@ -1,7 +1,7 @@
 import React from "react";
 import LoginPage from "./login/LoginPage";
 import ChatRoom from "./ChatRoom/index.jsx";
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from "react-router-dom";
 
 function App() {
   return (

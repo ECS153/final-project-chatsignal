@@ -1,6 +1,33 @@
 # Chat Signal : Milestones
 ### Che-An Wu, Corbin Harrell, David Guo, Jason Lin, Nathan Ng
 
+
+## Milestone 3: 5/26/2020
+- **General Updates**
+    1. Che-An Wu (Andy)
+        - Finish routing and helped with account post request to database using lambda, api gateway and dynamodb.
+        - ***Action Item:*** Intergrate chat's backend with the client.
+    2. Corbin Harrell
+        - Worked on diffie-helleman key exchange and helped with chat get and post request.
+        - ***Action Item:*** Connecting client with websockets and implement the encryption algorithm.
+    3. David Guo
+        - Setup AWS websocket to have a working chatroom using lambda, api gateway and dynamodb.
+        - ***Action Item:*** Link AWS to our actual chat app's backend.
+    4. Jason Lin
+        - Finished login post and get request using lambda, api gateway, and dynamodb.
+        - ***Action Item:*** Login authentication; verify location and prevent fraudulent activity.
+    5. Nathan Ng
+        - Finished register post and get request using lambda, api gateway, and dynamodb.
+        - ***Action Item:*** Login token authentication.
+
+- **Agenda**
+    1. Update on each of our progress from last week.
+    2. Discuss what we will finish by this week to prepare for the final presentation.
+    3. Learn AWS including Lambda, API Gateway, WebSocket, DynamoDB, CloudWatch.
+
+- **Video Link**
+    - https://drive.google.com/file/d/1GixgToB_Tq1dLcPaDoLbfq9LhV1Hz2jY/view
+
 ## Milestone 2: 5/18/2020
 - **General Updates**
     1. Che-An Wu

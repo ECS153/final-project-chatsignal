@@ -53,6 +53,7 @@ IAM V4 Signature References:
 
 -Request Signer: 
 	https://gist.github.com/davidkelley/c1274cffdc0d9d782d7e?fbclid=IwAR2glMMAigMbS6MbR_Io-z0f7OHuXxJN9NdZBKgZ1E4OKLl7Ql3NEb76PTw
+	https://github.com/mhart/aws4/blob/master/aws4.js
 
 ------------------------------------------------------------------------------------------------------
 
