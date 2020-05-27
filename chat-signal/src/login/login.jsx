@@ -40,12 +40,16 @@ export const Login = () => {
               }
         })
         .then(function (response) {
-            var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
-            var locVerified = verifyLocation(response.data.Item["Location"]["S"])
-            if (pwVerified && locVerified) {
-                isLoginVerified = true;
+            if (response.data.Item == undefined) {
+                message.error("Username is incorrect")
+            } else {
+                var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
+                var locVerified = verifyLocation(response.data.Item["Location"]["S"])
+                if (pwVerified && locVerified) {
+                    isLoginVerified = true;
+                }
+                console.log("Everything verified? " + isLoginVerified)
             }
-            console.log("Everything verified? " + isLoginVerified)
         })
         .then(response => {checkVerified()});
         console.log("done sending post to db...")
@@ -85,7 +89,7 @@ export const Login = () => {
             message.error('Login failed. Please try again.');
         }
     }
-    
+
     function verifyHash(hash) {
         //var hash = "$2a$10$fs7pMJBwBUHx/twmteN20u/20E4/Fkfv/0Qy3RUbuzkXD5.dXzssm";
         console.log("hash is " + hash);

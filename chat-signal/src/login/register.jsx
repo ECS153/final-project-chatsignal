@@ -5,23 +5,22 @@ import { message } from 'antd';
 import axios from 'axios';
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-
 export const Register = () => {
+    const passwordStrength = require('check-password-strength')
     const [username, getUsername] = useState(0); // react hooks
     const [email, getEmail] = useState(0); // react hooks
     const [password, getPassword] = useState(0); // react hooks
     const [city, getCity] = useState(0); // react hooks
     let history = useHistory();
-    // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let regSuccess = false;
 
-    const authRegInfo = () => {
-
-        //if auth succeed
-        regSuccess = true;
-        //else{
-        //     isLoginVerified = false;
-        // }
+    function checkRegistered(success) {
+        if (regSuccess) {
+            message.success('Successfully registered. Please login!');
+            history.go('/');
+        } else {
+            message.error('Registration failed. Please try again.');
+        }
     }
     
     function handleUsername(event) {
@@ -44,62 +43,96 @@ export const Register = () => {
         .then(res => {
             return res.text()
         }).then(ip => {
-            console.log('ip', ip);
-            // getIP(ip);
             var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
             fetch(endpoint)
             .then(response => response.json())
             .then(response => {
+            getCity("");
             getCity(response.city);
             });
         },);    
     }
 
-    function handlePackage(event) {
-        var JSONpackage = {username : username, email: email, password : password, city : city}
-        console.log(JSONpackage); // here's the information in JSON format
-    }
+    useEffect(() => {
+        if (city != "") {
+            addDB();
+        }
+    }, [city]);
 
     function saltAndHash(event) {
         let curComp = this;
-        // var plainPassword = this.state.password;
         const bcrypt = require('bcryptjs');
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash) {
                 console.log('A password was submitted: ' + password);
+                console.log('This is salt: ' + salt);
                 console.log('This is hash: ' + hash);
                 getPassword(hash);
             });
         });
     }
 
-    useEffect(() => {
-        handlePackage();
-        if (city != "") {
-            addDB();
-        }
-    }, [city]);
-
     async function addDB(event) {
         console.log("sending post to db...")
         axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
             { UserID: username, Email: email, Location: city, Password: password })
-            .then(function (response) { console.log(response); })
-
+            .then(function (response) {
+                console.log(response);
+                if (response.status == 200) {
+                    regSuccess = true;
+                }
+                checkRegistered();
+            });
         console.log("done sending post to db...")
     }
 
-    const onRegPressed = () => {
-        saltAndHash();
-        handleCity();
-        if (regSuccess) {
-            //history.push('/chatroom');
-            message.success('Successfully registered. Please log in!')
+    async function checkForm(event){
+        var userNoExist;
+        var passwordStrong;
+        console.log("checking for user exist...")
+        if (username == 0) {
+            message.error('No username given! Please try again.');
+            console.log("done checking user...");
         } else {
-            message.error('Registration failed. Please try again.');
+            await axios.get('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
+            {
+                params: {
+                    UserID : username
+                }
+            })
+            .then(function (response) {
+                if (response.data.Item == undefined) {
+                    userNoExist = true;
+                } else {
+                    userNoExist = false;
+                }
+                console.log("done checking user...")
+            })
+            .then(response => {
+                if (email == 0) {
+                    message.error('No email given! Please try again.')
+                } else {
+                    if (password == 0) {
+                        message.error('No password given! Please try again.')
+                    } else if (passwordStrength(password).value != "Weak") {
+                        if (userNoExist == true) {
+                            saltAndHash();
+                            handleCity();
+                        } else {
+                            message.error('Username already exists! Please try again.')
+                        }
+                    } else {
+                        message.error('Password to weak! Please try again.')
+                    }
+                }
+            });
         }
     }
 
+    const onRegPressed = () => {
+        checkForm();
+    }
+    
     return (
         <div className="base-container">
             <div className="content">

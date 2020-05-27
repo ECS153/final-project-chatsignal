@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
+    "check-password-strength": "^1.0.8",
     "cors": "^2.8.5",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
