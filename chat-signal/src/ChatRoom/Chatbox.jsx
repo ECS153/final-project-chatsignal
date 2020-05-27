@@ -4,7 +4,7 @@ import MsgInputBox from "./MsgInputBox.jsx";
 import "antd/dist/antd.css";
 import { Button } from "antd";
 
-import { forwardMsg } from "../webSocket";
+import { forwardMsg, disconnect } from "../webSocket";
 
 const MessageCell = (props) => (
   <div style={props.style}>
@@ -70,6 +70,7 @@ const Chatbox = (props) => {
           danger
           type="primary"
           size="large"
+          onClick={disconnect}
           style={Styles.endConnectionButtonStyle}
         >
           End Connection

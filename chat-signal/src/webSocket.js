@@ -52,3 +52,7 @@ export const sendMsg = (message) => {
     );
   }
 };
+
+export const disconnect = () => {
+  connection.close();
+};
