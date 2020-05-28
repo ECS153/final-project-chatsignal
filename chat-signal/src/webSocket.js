@@ -27,6 +27,7 @@ connection.onmessage = (message) => {
     //  The format of the message is senderID+=+ActualMessage
     let senderID = message.data.split("+=+")[0];
     let actualMessage = message.data.split("+=+")[1];
+    //TODO: ADD DECRYPTION HERE
     saveMsg(senderID, actualMessage);
   }
 };

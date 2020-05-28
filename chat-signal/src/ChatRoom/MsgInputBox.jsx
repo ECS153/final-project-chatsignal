@@ -5,6 +5,7 @@ const MsgInputBox = (props) => {
   const [message, setMsg] = useState("");
 
   function handleChange(event) {
+    //TODO: ADD ENCRYPTION HERE
     setMsg(event.target.value);
   }
 
