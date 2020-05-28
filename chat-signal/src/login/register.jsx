@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import logoImg from "../chatsignal.png"
 import { message } from 'antd';
 import axios from 'axios';
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
 export const Register = () => {
     const passwordStrength = require('check-password-strength')
@@ -54,13 +53,12 @@ export const Register = () => {
     }
 
     useEffect(() => {
-        if (city != "") {
+        if (city) {
             addDB();
         }
     }, [city]);
 
     function saltAndHash(event) {
-        let curComp = this;
         const bcrypt = require('bcryptjs');
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(password, salt, function(err, hash) {
@@ -78,7 +76,7 @@ export const Register = () => {
             { UserID: username, Email: email, Location: city, Password: password })
             .then(function (response) {
                 console.log(response);
-                if (response.status == 200) {
+                if (response.status === 200) {
                     regSuccess = true;
                 }
                 checkRegistered();
@@ -88,9 +86,8 @@ export const Register = () => {
 
     async function checkForm(event){
         var userNoExist;
-        var passwordStrong;
         console.log("checking for user exist...")
-        if (username == 0) {
+        if (!username) {
             message.error('No username given! Please try again.');
             console.log("done checking user...");
         } else {
@@ -101,7 +98,7 @@ export const Register = () => {
                 }
             })
             .then(function (response) {
-                if (response.data.Item == undefined) {
+                if (!response.data.Item) {
                     userNoExist = true;
                 } else {
                     userNoExist = false;
@@ -109,13 +106,13 @@ export const Register = () => {
                 console.log("done checking user...")
             })
             .then(response => {
-                if (email == 0) {
+                if (!email) {
                     message.error('No email given! Please try again.')
                 } else {
-                    if (password == 0) {
+                    if (!password) {
                         message.error('No password given! Please try again.')
-                    } else if (passwordStrength(password).value != "Weak") {
-                        if (userNoExist == true) {
+                    } else if (passwordStrength(password).value !== "Weak") {
+                        if (userNoExist) {
                             saltAndHash();
                             handleCity();
                         } else {
