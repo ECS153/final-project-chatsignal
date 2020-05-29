@@ -13,17 +13,16 @@ export const Login = () => {
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
-    var email;
     function handleUsername(event) {
         getUsername(event.target.value);
     }
-    
+
     function handlePassword(event) {
         getPassword(event.target.value);
     }
 
     const onLoginPressed = () => {
-        handleCity(); 
+        handleCity();
     }
 
     async function fetchUserInfo(){
@@ -43,12 +42,9 @@ export const Login = () => {
                 if (pwVerified && locVerified) {
                     isLoginVerified = true;
                 }
-                email = response.data.Item["Email"]["S"];
                 if(!locVerified && pwVerified){
                     history.push('/emailpage');
-                    console.log("hello");
                 }
-                console.log("Everything verified? " + isLoginVerified)
             }
         })
         .then(response => {checkVerified()});
@@ -60,18 +56,18 @@ export const Login = () => {
             method: 'GET',
             headers: {},
         })
-        .then(res => {
-            return res.text()
-        }).then(ip => {
-            var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
-            fetch(endpoint)
-            .then(response => response.json())
-            .then(response => {
-                // Reset City to trigger useeffect everytime login is pressed
-                getCity("");
-                getCity(response.city);
+            .then(res => {
+                return res.text()
+            }).then(ip => {
+                var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
+                fetch(endpoint)
+                    .then(response => response.json())
+                    .then(response => {
+                        // Reset City to trigger useeffect everytime login is pressed
+                        getCity("");
+                        getCity(response.city);
+                    });
             });
-        },);    
     }
 
     useEffect(() => {
@@ -79,12 +75,14 @@ export const Login = () => {
             fetchUserInfo();
         }
     }, [city]);
-    
+
     function checkVerified(event) {
         if (isLoginVerified) {
             message.success('Logged in successfully. Start chatting!')
-            
-            history.push('/chatroom');
+            history.push({
+                pathname: '/chatroom',
+                state: { userID: username }
+            })
         } else {
             message.error('Login failed. Please try again.');
         }

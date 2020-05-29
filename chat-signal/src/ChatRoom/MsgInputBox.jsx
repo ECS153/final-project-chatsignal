@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { sendMsg } from "../webSocket";
+import * as AES from "../AES.js"
 
 const MsgInputBox = (props) => {
   const [message, setMsg] = useState("");
-
+  const [key, setKey] = useState("examplekey");
   function handleChange(event) {
     //TODO: ADD ENCRYPTION HERE
     setMsg(event.target.value);
@@ -20,7 +21,9 @@ const MsgInputBox = (props) => {
       />
       <button
         onClick={() => {
-          sendMsg(message);
+          sendMsg(AES.AES_Encrypt(message,key));
+          console.log(AES.AES_Encrypt(message,key));
+          // sendMsg(message);
           setMsg(" ");
         }}
         style={Styles.btnStyle}

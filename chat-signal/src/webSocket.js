@@ -1,3 +1,5 @@
+
+import * as AES from "./AES.js"
 const url = "wss://in6l1ijjf5.execute-api.us-west-2.amazonaws.com/Beta";
 const connection = new WebSocket(url);
 
@@ -27,8 +29,13 @@ connection.onmessage = (message) => {
     //  The format of the message is senderID+=+ActualMessage
     let senderID = message.data.split("+=+")[0];
     let actualMessage = message.data.split("+=+")[1];
-    //TODO: ADD DECRYPTION HERE
-    saveMsg(senderID, actualMessage);
+
+    console.log(message);
+    let key = "examplekey";
+    if(actualMessage != undefined) {
+     let decryptedMsg = AES.AES_Decrypt(actualMessage, key);
+      saveMsg(senderID, decryptedMsg);
+    }
   }
 };
 

@@ -87,7 +87,10 @@ function checkVerified(event) {
     if (isLoginVerified) {
         message.success('Logged in successfully. Start chatting!')
         
-        history.push('/chatroom');
+        history.push({
+            pathname: '/chatroom',
+            state: { userID: username }
+        })
     } else {
         message.error('Login failed. Please try again.');
     }
