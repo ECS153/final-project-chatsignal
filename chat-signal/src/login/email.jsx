@@ -47,7 +47,7 @@ function handleCity(event) {
 }
 
 useEffect(() => {
-    if (city !== "") {
+    if (city) {
         fetchUserInfo();
     }
 }, [city]);
@@ -61,7 +61,7 @@ async function fetchUserInfo(){
           }
     })
     .then(function (response) {
-        if (response.data.Item === undefined) {
+        if (!response.data.Item) {
             message.error("Username is incorrect")
         } else {
             var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
@@ -76,7 +76,7 @@ async function fetchUserInfo(){
 }
 
 function verifyEmail(tempEmail) {
-    if (tempEmail == email) {
+    if (tempEmail === email) {
         return true;
     } else {
         return false;

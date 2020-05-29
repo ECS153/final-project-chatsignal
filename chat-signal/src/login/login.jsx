@@ -1,7 +1,7 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import logoImg from "../chatsignal.png"
-import { message} from 'antd';
+import { message } from 'antd';
 import axios from 'axios';
 
 //TODO: implement authentication.
@@ -13,6 +13,7 @@ export const Login = () => {
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
+
     function handleUsername(event) {
         getUsername(event.target.value);
     }
@@ -25,29 +26,31 @@ export const Login = () => {
         handleCity();
     }
 
-    async function fetchUserInfo(){
+    async function fetchUserInfo(event) {
         console.log("sending post to db...")
+        console.log(username)
         await axios.get('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-        {
-            params: {
-                UserID : username
-              }
-        })
-        .then(function (response) {
-            if (response.data.Item === undefined) {
-                message.error("Username is incorrect")
-            } else {
-                var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
-                var locVerified = verifyLocation(response.data.Item["Location"]["S"])
-                if (pwVerified && locVerified) {
-                    isLoginVerified = true;
+            {
+                params: {
+                    UserID: username
                 }
-                if(!locVerified && pwVerified){
-                    history.push('/emailpage');
+            })
+            .then(function (response) {
+                if (!response.data.Item) {
+                    message.error("Username is incorrect")
+                } else {
+                    var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
+                    var locVerified = verifyLocation(response.data.Item["Location"]["S"])
+                    if (pwVerified && locVerified) {
+                        isLoginVerified = true;
+                    }
+                    if (pwVerified && !locVerified) {
+                        history.push("./emailpage");
+                    }
+                    console.log("Everything verified? " + isLoginVerified)
                 }
-            }
-        })
-        .then(response => {checkVerified()});
+            })
+            .then(response => { checkVerified() });
         console.log("done sending post to db...")
     }
 
@@ -71,7 +74,7 @@ export const Login = () => {
     }
 
     useEffect(() => {
-        if (city !== "") {
+        if (city) {
             fetchUserInfo();
         }
     }, [city]);
@@ -89,12 +92,17 @@ export const Login = () => {
     }
 
     function verifyHash(hash) {
+        //var hash = "$2a$10$fs7pMJBwBUHx/twmteN20u/20E4/Fkfv/0Qy3RUbuzkXD5.dXzssm";
+        console.log("hash is " + hash);
+        console.log("password is " + password);
         const bcrypt = require('bcryptjs');
         return bcrypt.compareSync(password, hash);
     }
 
     function verifyLocation(loc) {
-        if (loc == city) {
+        console.log("last loc is " + loc);
+        console.log("current loc is " + city);
+        if (loc === city) {
             return true;
         } else {
             return false;
