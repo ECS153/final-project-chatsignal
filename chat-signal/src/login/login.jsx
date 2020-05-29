@@ -13,6 +13,8 @@ export const Login = () => {
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
+    let needVerifyLoc = false;
+
 
     function handleUsername(event) {
         getUsername(event.target.value);
@@ -27,7 +29,7 @@ export const Login = () => {
     }
 
     async function fetchUserInfo(event) {
-        console.log("sending post to db...")
+        console.log("sending request for user to db...")
         console.log(username)
         await axios.get('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
             {
@@ -45,13 +47,17 @@ export const Login = () => {
                         isLoginVerified = true;
                     }
                     if (pwVerified && !locVerified) {
-                        history.push("./emailpage");
+                        needVerifyLoc = true;
+                        history.push({
+                            pathname: '/emailpage',
+                            state: { userID: username }
+                        });
                     }
                     console.log("Everything verified? " + isLoginVerified)
                 }
             })
             .then(response => { checkVerified() });
-        console.log("done sending post to db...")
+        console.log("done receiving user from db...")
     }
 
     function handleCity(event) {
@@ -86,6 +92,8 @@ export const Login = () => {
                 pathname: '/chatroom',
                 state: { userID: username }
             })
+        } else if (needVerifyLoc) {
+            message.error("You have attempted to login from a new location. Please enter your password, along with your email.")
         } else {
             message.error('Login failed. Please try again.');
         }
