@@ -7,6 +7,7 @@ class Df {
     console.log("hi");
     this.g = BigInt(gen);
     this.p = BigInt(prime);
+    this.key = null;
   }
 
   compute() {
@@ -14,7 +15,11 @@ class Df {
   }
   computeSecret(gen) {
     let pubKey=BigInt(gen);
-    return (pubKey**this.secret)%this.p;
+    this.key = (pubKey**this.secret)%this.p;
+    return this.key;
+  }
+  getKey() {
+    return this.key
   }
 }
 // This is an example function, it shouldn't actually be used.
