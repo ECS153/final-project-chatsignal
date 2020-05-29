@@ -37,6 +37,7 @@ const Styles = {
     display: "flex",
     margin: 0,
     padding: 0,
+    height: '100vh'
   },
   leftContainer: {
     width: "30%",
