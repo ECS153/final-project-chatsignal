@@ -14,44 +14,44 @@ export const Login = () => {
 
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
-    let isLoginVerified = false;
+    let isLoginVerified = true;
     let retrieveUser = "";
 
     function handleUsername(event) {
         getUsername(event.target.value);
     }
-    
+
     function handlePassword(event) {
         getPassword(event.target.value);
     }
 
     const onLoginPressed = () => {
-        handleCity(); 
+        handleCity();
     }
 
-    async function fetchUserInfo(event){
+    async function fetchUserInfo(event) {
         var tempPW;
         console.log("sending post to db...")
         console.log(username)
         await axios.get('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-        {
-            params: {
-                UserID : username
-              }
-        })
-        .then(function (response) {
-            if (response.data.Item == undefined) {
-                message.error("Username is incorrect")
-            } else {
-                var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
-                var locVerified = verifyLocation(response.data.Item["Location"]["S"])
-                if (pwVerified && locVerified) {
-                    isLoginVerified = true;
+            {
+                params: {
+                    UserID: username
                 }
-                console.log("Everything verified? " + isLoginVerified)
-            }
-        })
-        .then(response => {checkVerified()});
+            })
+            .then(function (response) {
+                if (response.data.Item == undefined) {
+                    message.error("Username is incorrect")
+                } else {
+                    var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
+                    var locVerified = verifyLocation(response.data.Item["Location"]["S"])
+                    if (pwVerified && locVerified) {
+                        isLoginVerified = true;
+                    }
+                    console.log("Everything verified? " + isLoginVerified)
+                }
+            })
+            .then(response => { checkVerified() });
         console.log("done sending post to db...")
     }
 
@@ -60,31 +60,34 @@ export const Login = () => {
             method: 'GET',
             headers: {},
         })
-        .then(res => {
-            return res.text()
-        }).then(ip => {
-            var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
-            fetch(endpoint)
-            .then(response => response.json())
-            .then(response => {
-                // Reset City to trigger useeffect everytime login is pressed
-                getCity("");
-                getCity(response.city);
+            .then(res => {
+                return res.text()
+            }).then(ip => {
+                var endpoint = "http://ip-api.com/json/" + ip + "?fields=city";
+                fetch(endpoint)
+                    .then(response => response.json())
+                    .then(response => {
+                        // Reset City to trigger useeffect everytime login is pressed
+                        getCity("");
+                        getCity(response.city);
+                    });
             });
-        },);    
     }
 
     useEffect(() => {
-       // var JSONpackage = { username: username, password: password, location: city }
+        // var JSONpackage = { username: username, password: password, location: city }
         if (city != "") {
             fetchUserInfo();
         }
     }, [city]);
-    
+
     function checkVerified(event) {
         if (isLoginVerified) {
             message.success('Logged in successfully. Start chatting!')
-            history.push('/chatroom');
+            history.push({
+                pathname: '/chatroom',
+                state: { userID: username }
+            })
         } else {
             message.error('Login failed. Please try again.');
         }
