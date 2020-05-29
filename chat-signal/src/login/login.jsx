@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useCallback, Component } from "react";
+import React, { useState, useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import logoImg from "../chatsignal.png"
-import { message, InputNumber } from 'antd';
-import useForceUpdate from 'use-force-update';
+import { message} from 'antd';
 import axios from 'axios';
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
 //TODO: implement authentication.
 export const Login = () => {
@@ -15,8 +13,7 @@ export const Login = () => {
     let history = useHistory();
     // NOTE: Will navigate to chatroom screen once isLoginVerified is set to true;
     let isLoginVerified = false;
-    let retrieveUser = "";
-
+    var email;
     function handleUsername(event) {
         getUsername(event.target.value);
     }
@@ -29,10 +26,8 @@ export const Login = () => {
         handleCity(); 
     }
 
-    async function fetchUserInfo(event){
-        var tempPW;
+    async function fetchUserInfo(){
         console.log("sending post to db...")
-        console.log(username)
         await axios.get('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
         {
             params: {
@@ -40,13 +35,18 @@ export const Login = () => {
               }
         })
         .then(function (response) {
-            if (response.data.Item == undefined) {
+            if (response.data.Item === undefined) {
                 message.error("Username is incorrect")
             } else {
                 var pwVerified = verifyHash(response.data.Item["Password"]["S"]);
                 var locVerified = verifyLocation(response.data.Item["Location"]["S"])
                 if (pwVerified && locVerified) {
                     isLoginVerified = true;
+                }
+                email = response.data.Item["Email"]["S"];
+                if(!locVerified && pwVerified){
+                    history.push('/emailpage');
+                    console.log("hello");
                 }
                 console.log("Everything verified? " + isLoginVerified)
             }
@@ -75,8 +75,7 @@ export const Login = () => {
     }
 
     useEffect(() => {
-       // var JSONpackage = { username: username, password: password, location: city }
-        if (city != "") {
+        if (city !== "") {
             fetchUserInfo();
         }
     }, [city]);
@@ -84,6 +83,7 @@ export const Login = () => {
     function checkVerified(event) {
         if (isLoginVerified) {
             message.success('Logged in successfully. Start chatting!')
+            
             history.push('/chatroom');
         } else {
             message.error('Login failed. Please try again.');
@@ -91,16 +91,11 @@ export const Login = () => {
     }
 
     function verifyHash(hash) {
-        //var hash = "$2a$10$fs7pMJBwBUHx/twmteN20u/20E4/Fkfv/0Qy3RUbuzkXD5.dXzssm";
-        console.log("hash is " + hash);
-        console.log("password is " + password);
         const bcrypt = require('bcryptjs');
         return bcrypt.compareSync(password, hash);
     }
 
     function verifyLocation(loc) {
-        console.log("last loc is " + loc);
-        console.log("current loc is " + city);
         if (loc == city) {
             return true;
         } else {
