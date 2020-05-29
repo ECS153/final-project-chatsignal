@@ -7,9 +7,9 @@ class ContactsSidebar extends Component {
     return (
       <React.Fragment style={Styles.mainContainer}>
         <div style={Styles.contactStyle}>
-          <div style={Styles.blubStyle}>D</div>
+          <div style={Styles.blubStyle}>{this.props.userID[0]}</div>
           <div style={Styles.infoStyle}>
-            <div style={Styles.userNameStyle}>David Guo</div>
+            <div style={Styles.userNameStyle}>{this.props.userID}</div>
             <div style={Styles.userStatusStyle}>Online</div>
           </div>
         </div>

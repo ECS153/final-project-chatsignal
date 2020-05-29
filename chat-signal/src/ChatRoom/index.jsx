@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import ContactsSidebar from "./ContactsSidebar.jsx";
 import Chatbox from "./Chatbox.jsx";
 
-const ChatRoom = () => {
+const ChatRoom = props => {
+  const location = useLocation();
   const [contacts, setContacts] = useState([
     { initial: "E", name: "ECS 153 - SQ20", status: "" }
   ]);
   // default to chatting with first person on contact list
   const [selectedChatterIndex, setSelectedChatterIndex] = useState(0);
+
 
   const onContactPressed = (selected) => {
     console.log(
@@ -16,10 +19,11 @@ const ChatRoom = () => {
     setSelectedChatterIndex(selected);
   };
 
+
   return (
     <div style={Styles.MainContainer}>
       <div style={Styles.leftContainer}>
-        <ContactsSidebar contacts={contacts} updateChatter={onContactPressed} />
+        <ContactsSidebar userID={location.state.userID} contacts={contacts} updateChatter={onContactPressed} />
       </div>
       <div style={Styles.rightContainer}>
         <Chatbox chatter={contacts[selectedChatterIndex]} />
