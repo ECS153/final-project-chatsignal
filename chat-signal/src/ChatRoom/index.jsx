@@ -4,13 +4,10 @@ import Chatbox from "./Chatbox.jsx";
 
 const ChatRoom = () => {
   const [contacts, setContacts] = useState([
-    { initial: "A", name: "Andy Wu", status: "User is typing..." },
-    { initial: "C", name: "Corbin Harell", status: "1 New Message" },
-    { initial: "J", name: "Jason Lin", status: "User is typing..." },
-    { initial: "N", name: "Nathan Ng", status: "User is typing..." },
+    { initial: "E", name: "ECS 153 - SQ20", status: "" }
   ]);
   // default to chatting with first person on contact list
-  const [selectedChatterIndex, setSelectedChatterIndex] = useState(2);
+  const [selectedChatterIndex, setSelectedChatterIndex] = useState(0);
 
   const onContactPressed = (selected) => {
     console.log(
