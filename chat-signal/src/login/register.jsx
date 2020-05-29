@@ -11,9 +11,8 @@ export const Register = () => {
     const [password, getPassword] = useState(0); // react hooks
     const [city, getCity] = useState(0); // react hooks
     let history = useHistory();
-    let regSuccess = false;
 
-    function checkRegistered(success) {
+    function checkRegistered(regSuccess) {
         if (regSuccess) {
             message.success('Successfully registered. Please login!');
             history.go('/');
@@ -71,6 +70,7 @@ export const Register = () => {
     }
 
     async function addDB(event) {
+        var regSuccess = false;
         console.log("sending post to db...")
         axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
             { UserID: username, Email: email, Location: city, Password: password })
@@ -79,7 +79,7 @@ export const Register = () => {
                 if (response.status === 200) {
                     regSuccess = true;
                 }
-                checkRegistered();
+                checkRegistered(regSuccess);
             });
         console.log("done sending post to db...")
     }
