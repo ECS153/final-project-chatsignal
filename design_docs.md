@@ -3,7 +3,8 @@
   https://docs.google.com/document/d/1g35NiUiBuKut5xR0oBJ0tLCID0UcpfDiajBdMoTP47k/edit?usp=sharing
 
 2. Nathan
-https://docs.google.com/document/d/1GsBTFnoJnmSZ6JcTDzgqzcjC4QxC5FmuD9i_si8EP3c/edit?usp=sharing
+   Registration, Salt and Hash, Get Request
+   https://docs.google.com/document/d/1GsBTFnoJnmSZ6JcTDzgqzcjC4QxC5FmuD9i_si8EP3c/edit?usp=sharing
 
 3. Andy
   Documentation for the client side (front-end) of our project

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Input } from "antd";
-import { sendMsg, handleChange } from "../webSocket";
+import React, { useState } from "react";
+import { sendMsg } from "../webSocket";
 
 const MsgInputBox = (props) => {
   const [message, setMsg] = useState("");
 
   function handleChange(event) {
+    //TODO: ADD ENCRYPTION HERE
     setMsg(event.target.value);
   }
 

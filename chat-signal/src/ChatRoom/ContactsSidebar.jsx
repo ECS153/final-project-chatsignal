@@ -7,26 +7,15 @@ class ContactsSidebar extends Component {
     return (
       <React.Fragment style={Styles.mainContainer}>
         <div style={Styles.contactStyle}>
-          <div style={Styles.blubStyle}>D</div>
+          <div style={Styles.blubStyle}>{this.props.userID[0]}</div>
           <div style={Styles.infoStyle}>
-            <div style={Styles.userNameStyle}>David Guo</div>
+            <div style={Styles.userNameStyle}>{this.props.userID}</div>
             <div style={Styles.userStatusStyle}>Online</div>
           </div>
         </div>
 
         <div style={Styles.btnBarStyle}>
           <div style={Styles.actualBtnStyle}>CONTACTS</div>
-          <div
-            style={{
-              paddingLeft: 30,
-              paddingRight: 30,
-              fontSize: 28,
-              color: "#B2B2B2",
-            }}
-          >
-            |
-          </div>
-          <div style={Styles.actualBtnStyle}>NEW CHAT</div>
         </div>
 
         {this.state.contacts.map((cell, index) => (
@@ -60,7 +49,7 @@ const Styles = {
 
   btnBarStyle: {
     display: "flex",
-    justifyContent: "space-between",
+    alignItems: "flex-start",
     margin: 10,
     paddingTop: 5,
     paddingBottom: 5,
@@ -68,7 +57,6 @@ const Styles = {
 
   actualBtnStyle: {
     flexGrow: 1,
-    textAlign: "center",
     fontFamily: "Karla",
     fontWeight: 400,
     fontSize: 28,
