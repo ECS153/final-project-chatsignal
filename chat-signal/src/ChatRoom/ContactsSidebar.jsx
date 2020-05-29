@@ -16,17 +16,6 @@ class ContactsSidebar extends Component {
 
         <div style={Styles.btnBarStyle}>
           <div style={Styles.actualBtnStyle}>CONTACTS</div>
-          <div
-            style={{
-              paddingLeft: 30,
-              paddingRight: 30,
-              fontSize: 28,
-              color: "#B2B2B2",
-            }}
-          >
-            |
-          </div>
-          <div style={Styles.actualBtnStyle}>NEW CHAT</div>
         </div>
 
         {this.state.contacts.map((cell, index) => (
@@ -60,7 +49,7 @@ const Styles = {
 
   btnBarStyle: {
     display: "flex",
-    justifyContent: "space-between",
+    alignItems: "flex-start",
     margin: 10,
     paddingTop: 5,
     paddingBottom: 5,
@@ -68,7 +57,6 @@ const Styles = {
 
   actualBtnStyle: {
     flexGrow: 1,
-    textAlign: "center",
     fontFamily: "Karla",
     fontWeight: 400,
     fontSize: 28,
