@@ -73,7 +73,7 @@ export const Register = () => {
         var regSuccess = false;
         console.log("sending post to db...")
         axios.post('https://e770o4wls8.execute-api.us-west-2.amazonaws.com/prod',
-            { UserID: username, Email: email, Location: city, Password: password })
+            { UserID: username, Email: email, Location : city, Password: password })
             .then(function (response) {
                 console.log(response);
                 if (response.status === 200) {
