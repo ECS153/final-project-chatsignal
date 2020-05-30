@@ -1,4 +1,5 @@
 /* AES */
+/* global BigInt */
 
 /*********************************** Constants ***********************************/
 /* Multiplication tables */
@@ -313,6 +314,18 @@ function StringToKey(keyString) {
   return key;
 }
 
+function BigToKey(bigKey) {
+  let key = new Array(8);
+  let curWord = Array(4);
+  for(let row_key = 0; row_key<key.length; row_key++) {
+    for(let col_key = 0; col_key<4; col_key++) { 
+      curWord[col_key] = Number(bigKey >> BigInt((248-(col_key+row_key*4)*8) & 0xff));
+    }
+    key[row_key] = ArrayToWord(curWord);
+  }
+  return key;
+}
+
 
 function toStringState(curState) {
   let enc_msg = "";
@@ -499,7 +512,7 @@ function MixColumns(stateArray,rKey) {
 
 export function AES_Encrypt(message,sKey) {
   var e_message = '';
-  let key = StringToKey(sKey);
+  let key = BigToKey(sKey);
   let rKeys = ExpandKey(key);
   let msgArray = splitMessage(message);
   for(let msg in msgArray) {
@@ -573,7 +586,7 @@ function invMixColumns(stateArray,rKey) {
 }
 
 export function AES_Decrypt(message,sKey) {
-  let key = StringToKey(sKey);
+  let key = BigToKey(sKey);
   let rKeys = ExpandKey(key);
   let d_message = '';
   let msgArray = splitEncodedMessage(message);
@@ -595,6 +608,7 @@ export function AES_Decrypt(message,sKey) {
 }
 /*********************************************************************************/
 
-let e = AES_Encrypt("hi","key");
-console.log(e);
-console.log(AES_Decrypt(e,"key"));
+// let e = AES_Encrypt("hi",0x02389475n);
+// console.log(e);
+// console.log(AES_Decrypt(e,0x02389475n));
+

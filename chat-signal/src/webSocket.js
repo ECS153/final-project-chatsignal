@@ -1,18 +1,23 @@
-
+/* global BigInt */
 import * as AES from "./AES.js"
-const url = "wss://in6l1ijjf5.execute-api.us-west-2.amazonaws.com/Beta";
+import Df from "./Df.js"
+const url = "wss://in6l1ijjf5.execute-api.us-west-2.amazonaws.com/KeyExchangeBeta";
 const connection = new WebSocket(url);
 
 let messageHistory = [];
 let CONNECTED = false;
 let IS_FIRST_MSG = true;
+let KEY_INIT = false;
 let connectionId = null;
+let key = null;
+let userSecret = new Df();
+let tempKey = null;
 
 connection.onopen = () => {
   console.log("Connection Established!");
   CONNECTED = true;
   //  Right after connection is established, request this client's connection ID
-  connection.send(`{"action": "requestConnectionID"}`);
+  connection.send(`{"action": "requestConnectionIDCopy"}`);
 };
 
 connection.onerror = (error) => {
@@ -20,21 +25,46 @@ connection.onerror = (error) => {
 };
 
 connection.onmessage = (message) => {
-  if (IS_FIRST_MSG) {
-    //  The first message is always this client's connection ID, save it for later use
-    connectionId = message.data;
-    IS_FIRST_MSG = false;
-  } else {
-    //  Every message will be prepended with the sender's connection ID by server
-    //  The format of the message is senderID+=+ActualMessage
-    let senderID = message.data.split("+=+")[0];
-    let actualMessage = message.data.split("+=+")[1];
-
-    console.log(message);
-    let key = "examplekey";
-    if(actualMessage != undefined) {
-     let decryptedMsg = AES.AES_Decrypt(actualMessage, key);
+  let messageData = message.data;
+  console.log(messageData);
+  let messageType = messageData.split("+=+")[0];
+  let senderID = messageData.split("+=+")[1];
+  console.log("MessageType:" + messageType);
+  console.log("SenderID: " + senderID);
+  if (messageType.localeCompare("txtMsg") === 0) {
+    let actualMessage = messageData.split("+=+")[2];
+    console.log("Recieved Encrypted Message: " +actualMessage);
+    if(actualMessage != undefined && userSecret.getKey() != null) {
+    let decryptedMsg = AES.AES_Decrypt(actualMessage, userSecret.getKey());
       saveMsg(senderID, decryptedMsg);
+    }
+  } else if (messageType.localeCompare("id") === 0) {
+    connectionId = messageData.split("+=+")[1];
+    console.log("Id Recieved: " + connectionId);
+    //Once connected, establish a new key
+    connection.send(`{"action": "establishKey"}`);
+  } else if (messageType.localeCompare("keyGen") === 0) { // only generate on your request
+    //set new userSecret settings
+    console.log(messageData);
+    let prime = "0x" + messageData.split("+=+")[2];
+    let gen =  "0x" + messageData.split("+=+")[3];
+    let n = messageData.split("+=+")[4];
+    userSecret.setP(BigInt(prime));
+    userSecret.setG(BigInt(gen));
+    userSecret.setRounds(n);
+    userSecret.resetSecret();
+    let publicKey = userSecret.compute();
+    let keyString = publicKey.toString(16);
+    connection.send(`{"action": "keyExchange","publicKey": "${keyString}","n":"${n}"}`);
+  } else if (messageType.localeCompare("keyExchange") === 0
+            && senderID.localeCompare(connectionId) !== 0) { // prevent computing on their own public key
+    userSecret.setRounds(messageData.split("+=+")[3]);
+    let nextRound = userSecret.getRounds().toString();
+    let newPub = "0x" + messageData.split("+=+")[2]; // set as hex
+    console.log(userSecret.computeSecret(newPub));
+    if(userSecret.getRounds() > 1) {
+      let keyString = userSecret.getKey().toString(16);
+      connection.send(`{"action": "keyExchange","publicKey": "${keyString}","n":"${nextRound}"}`);
     }
   }
 };
@@ -56,14 +86,20 @@ export const fetchMsgHistory = () => {
   return messageHistory;
 };
 
+export const fetchKey = () => {
+  return userSecret.getKey();
+}
+
 //  Send message to the websocket. Only allow client to send after the connection is established
 export const sendMsg = (message) => {
   if (CONNECTED === true) {
+    console.log("test");
     connection.send(
-      `{"action": "onMessage", "message": "${message.toString()}"}`
+      `{"action": "onMessageCopy", "message": "${message.toString()}"}`
     );
   }
 };
+
 
 //  Close the socket connection when "end connection" is clicked
 export const disconnect = () => {
