@@ -67,12 +67,13 @@ const Styles = {
   btnStyle: {
     flexGrow: 3,
     display: "flex",
+    alignItems: "center",
 
     fontSize: 24,
     borderStyle: "hidden",
     borderTopStyle: "solid",
     borderTopWidth: 2,
-    borderColor: "gray",
+    backgroundColor: "transparent",
   },
 };
 
