@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { sendMsg } from "../webSocket";
-import * as AES from "../AES.js"
+import * as AES from "../AES.js";
 
 const MsgInputBox = (props) => {
   const [message, setMsg] = useState("");
@@ -21,8 +21,8 @@ const MsgInputBox = (props) => {
       />
       <button
         onClick={() => {
-          sendMsg(AES.AES_Encrypt(message,key));
-          console.log(AES.AES_Encrypt(message,key));
+          sendMsg(AES.AES_Encrypt(message, key));
+          console.log(AES.AES_Encrypt(message, key));
           // sendMsg(message);
           setMsg(" ");
         }}
@@ -64,12 +64,13 @@ const Styles = {
   btnStyle: {
     flexGrow: 3,
     display: "flex",
+    alignItems: "center",
 
     fontSize: 24,
     borderStyle: "hidden",
     borderTopStyle: "solid",
     borderTopWidth: 2,
-    borderColor: "gray",
+    backgroundColor: "transparent",
   },
 };
 
