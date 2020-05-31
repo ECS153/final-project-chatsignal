@@ -11,7 +11,7 @@ class Df {
     this.secret = null;
     this.g = null;
     this.p = null;
-    this.key = null;
+    this.key = 0n;
     this.rounds = 0;
   }
 
