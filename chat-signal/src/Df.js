@@ -1,5 +1,5 @@
 /* global BigInt */
-var forge = require('node-forge');
+var forge = require("node-forge");
 var bits = 256;
 
 class Df {
@@ -28,7 +28,7 @@ class Df {
   }
 
   getRounds() {
-    return this.rounds
+    return this.rounds;
   }
 
   resetSecret() {
@@ -36,18 +36,18 @@ class Df {
   }
 
   compute() {
-    return (this.g**this.secret)%this.p;
+    return this.g ** this.secret % this.p;
   }
   computeSecret(gen) {
-    let pubKey=BigInt(gen);
-    this.key = (pubKey**this.secret)%this.p;
+    let pubKey = BigInt(gen);
+    this.key = pubKey ** this.secret % this.p;
     return this.key;
   }
   getKey() {
-    return this.key
+    return this.key;
   }
 }
-module.exports = Df;
+export default Df;
 // This is an example function, it shouldn't actually be used.
 // This conjoins the opperations that need to be taekn on the server and the client
 // function keyExchange() {
@@ -70,7 +70,7 @@ module.exports = Df;
 //     let bSecret = b.computeSecret(aPublic);// Client B
 //     console.log(bSecret.toString(16));
 //   });
-  
+
 // }
 
 // function keyExchangeMulty() {
@@ -99,7 +99,7 @@ module.exports = Df;
 //     }
 //     console.log(secretKeys);
 //   });
-  
+
 // }
 
 // keyExchangeMulty();
