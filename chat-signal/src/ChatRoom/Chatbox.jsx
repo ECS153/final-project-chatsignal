@@ -7,9 +7,9 @@ import { fetchMsgHistory, disconnect } from "../webSocket";
 const MessageCell = (props) => (
   <div style={props.style}>
     <div style={Styles.messageCellContainer}>
-      {props.showAvatar ? (
+      {/* {props.showAvatar ? (
         <div style={Styles.blubStyle}>{props.chatter.initial}</div>
-      ) : null}
+      ) : null} */}
       {props.content}
     </div>
   </div>
