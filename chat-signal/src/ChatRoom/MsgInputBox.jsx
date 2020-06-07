@@ -1,15 +1,14 @@
 /* global BigInt */
 import React, { useState } from "react";
 import { sendMsg, fetchKey } from "../webSocket";
-import * as AES from "../Encryption/AES.js"
+import * as AES from "../Encryption/AES.js";
 
 const MsgInputBox = (props) => {
   const [message, setMsg] = useState("");
   const [key, setKey] = useState(0x0n);
   const [userID, setUser] = useState(props.userID);
-  console.log("User in MSG: "+props.userID);
+  console.log("User in MSG: " + props.userID);
   function handleChange(event) {
-    //TODO: ADD ENCRYPTION HERE
     setMsg(event.target.value);
   }
 
@@ -26,8 +25,8 @@ const MsgInputBox = (props) => {
         onClick={() => {
           setKey(fetchKey());
           console.log(key);
-          sendMsg(userID,AES.AES_Encrypt(message,key));
-          console.log(AES.AES_Encrypt(message,key));
+          sendMsg(userID, AES.AES_Encrypt(message, key));
+          console.log(AES.AES_Encrypt(message, key));
           // sendMsg(message);
           setMsg(" ");
         }}
