@@ -45,6 +45,9 @@ chat-signal
     │   │   onConnect.js
     │   │   onDisconnect.js
     │   │   patch.js
+    |   |   keySharing.js
+    |   |   keyExchange.js
+    |   |   requestConnectionID.js
     │
     └───Login
     │   │   email.jsx
@@ -78,7 +81,7 @@ The following functions are AWS lambda functions that are invoked accordingly wh
     When a message is sent to the route `onMessageCopy`, this funciton will be invoked. The function will parsed the actual message, scan the database for all the connection Ids that appeared in the same table as the sender, and initiate a POST request to forward the incoming message to every clients that are connected to the socket. <br />
     
   * `onConnect.js` <br />
-    When a user is connected to the socket for the first time, this function will be invoked and it will assign the newly connected user a unique connection id. This id will also be store into a database for future message forwarding purpose. <br />
+    When a user is connected to the socket for the first time, this function will be invoked and it will assign the newly connected user a unique connection id. This id will also be stored into a database for future message forwarding purpose. <br />
 
   * `onDisconnect.js` <br />
     When a user disconnect from the socket, this function will be invoked. The function will scan the appropriate database table and remove the entry that contians this disconnected user's conneciton id. <br />
@@ -86,6 +89,17 @@ The following functions are AWS lambda functions that are invoked accordingly wh
   * `patch.js` <br />
     This is a helper function that has to do with AWS websocket API. This patch is needed in order to successfully POST a message to a connected client with his/her connection id.
 
+
+  * `keySharing.js` <br />
+    This function is used to send the generator, original key and number of connected users to all connected users. The original key is a 256 bit prime number, and the generator is 2. This function runs every time a new user connects so that they key generatioon process starts off the same for all users.
+    
+    
+  * `keyExchange.js` <br />
+    This function is used to pass the user generated public keys in a circular fashion. After generating a public key, each user sends that key along with a number that represents the number of remaining rounds of key passing. This number is decremented by this function, and then sent, along with the public key, to the user next to the calling user. In this context, the "next" user is the user whose connection ID is stored after the calling user. In the case that there is no user connection stored after the calling user, it is sent to the first stored user.
+    
+    
+  * `requestConnectionID.js` <br />
+    This function is called as soon as the user connects to the websocket. It returns to the caller the connection ID associated with their session. This connection ID is used by later functions on the client side.
 
 
 
