@@ -14,13 +14,13 @@ Go into the public directory and use the command
 chat-signal
 │   
 └───Documentation
-|   │   AWS and React Documentation.txt
-|   │   Chat Signal Chatroom mockup.png
+│   │   AWS and React Documentation.txt
+│   │   Chat Signal Chatroom mockup.png
 │   
 └───node-modules
-|   │   ...(dependencies)
-|
-|   package-lock.json
+│   │   ...(dependencies)
+│
+│   package-lock.json
 │   package.json
 │
 └───public
@@ -35,20 +35,32 @@ chat-signal
     │   manifest.json
     │
     └───AWS
-    |   │   ...
+    │   │   fetchUserInfo.js
+    │   │   HandleMessage.js
+    │   │   onConnect.js
+    │   │   onDisconnect.js
+    │   │   patch.js
+    │
     └───Login
-    |   │   ...
-    |   │   ...
+    │   │   email.jsx
+    │   │   EmailPage.jsx
+    │   │   index.jsx
+    │   │   login.jsx
+    │   │   LoginPage.jsx
+    │   │   LoginPage.scss
+    │   │   register.jsx
+    │   │   style.scss
+    │
     └───Chatroom
-    |   │   ...
-    |   │   ...
+    │   │   Chatbox.jsx
+    │   │   ContactsCell.jsx
+    │   │   ContactsSidebar.jsx
+    │   │   index.jsx
+    │   │   MsgInputBox.jsx
+    │
     └───Encryption
         │   AES.js
         │   Df.js
-
-
-    
-
 ```
 
 
