@@ -1,6 +1,6 @@
-# final-project-chatsignal
+# ChatSignal: A Web Based AES Encrypted Chat App
 
-### Build and run chatsignal locally
+## Build and run chatsignal locally
 To run the project locally, go into ./final-project-chatsignal/chat-signal and run the command 
 `npm run build` to make a new production build. <br/>
 After the build is complete, a "build" folder will appear. Move that folder to ./final-project-chatsignal/chat-signal/public and replace the old build. <br/>
@@ -8,7 +8,7 @@ Go into the public directory and use the command
 `npm start` to start the project locally. The default port is `localhost:3000`.<br/>
 First time user should register and login to chatsignal. You can open up two localhosts to test out the chat functionality.
 
-### Project structure
+## Project structure
 
 ```
 .
@@ -73,7 +73,7 @@ chat-signal
 ```
 
 
-## AWS
+## AWS Lambda Functions
 The following functions are AWS lambda functions that are invoked accordingly when AWS Websocket API recieve a request or message. These files will not work or have any effect locally. For more detail on how to setup Web socket and lambda functions on AWS, please refer to the Documentation directory.
 
   * `fetchUserInfo.js` <br />
@@ -105,11 +105,7 @@ The following functions are AWS lambda functions that are invoked accordingly wh
   * `requestConnectionID.js` <br />
     This function is called as soon as the user connects to the websocket. It returns to the caller the connection ID associated with their session. This connection ID is used by later functions on the client side.
 
-
-
-
-## Register/Login
-### Register
+## Register
 * `register.jsx` <br />
     This module handles the registration aspect of the login authentication, including populating the form and calling get/post requests.
     When a user fills out the form, onChange will update the variables: username, email, and password. This is done by handleX(event) where X are the variable names.
@@ -125,17 +121,13 @@ The following functions are AWS lambda functions that are invoked accordingly wh
      * `checkRegistered(regSuccess)` <br />
         If the registration was a success, the user will be redirected to the login page. Otherwise, an error message will show asking the user to try registering again.
 
-### Login
+## Login
 
 
 
 
 
 ## Chatroom
-
-
-
-
 
 
 
@@ -189,22 +181,13 @@ The following functions are AWS lambda functions that are invoked accordingly wh
     * `computeSecret(gen)` <br /> sets and returns the key based off of a passed in public key used as the new generator, the base and secret according to the formula `gen^(secret) % base`
     <br />
     Df key exchange is preformed by websocket.js in rounds. After the initial key generation, users pass their keys to the next user. The users then all generate new keys based off of the keys passed to them. Users continue to pass and generate new keys until every user has recieved n number of keys where n is the number of users minus 1. This key exchange is secure because the final public key is never revealed and can only bebe obtained by being part of the Df circular exchange.
-    
-    
-
-
-
-
-
-
-
 
 ## WebSocket
 Web socket is in charge of communicating with the AWS Websocket API so that the user can send and recieve message in real time. The following overview will walk you through the basic workflow of how the web socket manage, parse, and store incoming data and how it send client requested messages.
 
 `connection.onopen()` Upon connection establish, the webSocket will immediately send a request to the AWS API to get this client's conneciton id. The route is "requestConnectionIDCopy."<br />
 
-`connection.onmessage` Upon recieving message from other clients, there are four possible cases. Note that the raw message is a string that's delimited by "+=+" characters.<br />
+`connection.onmessage()` Upon recieving message from other clients, there are four possible cases. Note that the raw message is a string that's delimited by "+=+" characters.<br />
 
 1. Connection ID:
     If the incoming message is of type ID, the raw message would be <br />
@@ -219,12 +202,12 @@ Web socket is in charge of communicating with the AWS Websocket API so that the 
 3. Key Generation:
     if the incoming message is of type keyGen, then the raw text would be <br />
     `<messageType>+=+<senderConnectionID>+=+<prime>+=+<gen>+=+<n>`<br />
-    The fields prime and gen are used to instantiate an instance of the Df class, which is used to generate the users secret key. the n field represents the number of users currently connected. After the Df class is initiated, the user calculates a public key with it sends, along with n, in a keyExchange message to the websocket
+    The fields `prime` and `gen` are used to instantiate an instance of the Df class, which is used to generate the users secret key. the `n` field represents the number of users currently connected. After the Df class is initiated, the user calculates a public key with it sends, along with `n`, in a keyExchange message to the websocket
     
 4. Key Exchange:
     if the incoming message is of type keyExchange, then the raw text would be <br />
     `<messageType>+=+<senderConnectionID>+=+<publickey>+=+<n>`<br />
-    The field publickey is the generated public key of the user whos ID is stored before the recieving user. The recieving user uses this key to generate a new key with their Df object. The n field represents the number of remaining rounds of key exchange. if n is greater than 1, then the newly generated key, along with n, is sent in a keyExchange message to the websocket. Otherwise, the newly generated key is kept by the user for decrypting and encrypting messages.
+    The field `publickey` is the generated public key of the user whos ID is stored before the recieving user. The recieving user uses this key to generate a new key with their Df object. The `n` field represents the number of remaining rounds of key exchange. if `n` is greater than 1, then the newly generated key, along with `n`, is sent in a `keyExchange` message to the websocket. Otherwise, the newly generated key is kept by the user for decrypting and encrypting messages.
         
 `saveMsg()` The function will be called when the webSocket recieved a text message. The message will be formatted into javascript object with two properties: type and content. The type could be either external or internal. The content will be the actual message that other clients snet. <br />
 Note that in current implementation these message willbe pushed into a global array in client's local memory. Thus the message history will be discarded if the user disconnect.
