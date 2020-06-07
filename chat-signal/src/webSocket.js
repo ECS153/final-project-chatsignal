@@ -17,7 +17,7 @@ connection.onopen = () => {
   console.log("Connection Established!");
   CONNECTED = true;
   //  Right after connection is established, request this client's connection ID
-  connection.send(`{"action": "requestConnectionIDCopy"}`);
+  connection.send(`{"action": "requestConnectionID"}`);
 };
 
 connection.onerror = (error) => {
@@ -98,7 +98,7 @@ export const sendMsg = (userID, message) => {
   if (CONNECTED === true) {
     console.log("test");
     connection.send(
-      `{"action": "onMessageCopy", "userID": "${userID.toString()}", "message": "${message.toString()}"}`
+      `{"action": "onMessage", "userID": "${userID.toString()}", "message": "${message.toString()}"}`
     );
   }
 };
