@@ -142,6 +142,7 @@ The following functions are AWS lambda functions that are invoked accordingly wh
         Inverse of ShiftRows. Shifts each row to the right in a circular fashion.
     * `invMixColumns(stateArray)` <br />
         Invers of MixColumns. Same type of multiplication but using different substitutions.
+        <br />
     AES_Encryption takes a message string and a BigInt key as arguments. The key is expanded using `ExpandKey` and the message string is split up into 16-character long groups. These groups are put into a 4x4 array, which is then encrypted by preforming the following transformations:
     * AddRoundKey
     13 of rounds:
@@ -152,7 +153,9 @@ The following functions are AWS lambda functions that are invoked accordingly wh
     * SubBytes
     * ShiftRows
     * AddRoundKey
+    <br />
     The resulting encrypted message piece is added to a string, and then the next group of characters is encrypted and added to the string untill the entire message has been encrypted. The resulting string is then returned
+    <br />
     AES_Decryption is meant to preform the inverse of all the Encryption transformations. It works the exact same way by splitting up the message, but each piece undergoes the following transformations instead:
     * AddRoundKey
     13 of rounds:
@@ -168,6 +171,7 @@ The following functions are AWS lambda functions that are invoked accordingly wh
     * `compute()` <br /> sets and returns the key based off of the generator, base and secret according to the formula `g^(secret) % base`
     
     * `computeSecret(gen)` <br /> sets and returns the key based off of a passed in public key used as the new generator, the base and secret according to the formula `gen^(secret) % base`
+    <br />
     Df key exchange is preformed by websocket.js in rounds. After the initial key generation, users pass their keys to the next user. The users then all generate new keys based off of the keys passed to them. Users continue to pass and generate new keys until every user has recieved n number of keys where n is the number of users minus 1. This key exchange is secure because the final public key is never revealed and can only bebe obtained by being part of the Df circular exchange.
     
     
