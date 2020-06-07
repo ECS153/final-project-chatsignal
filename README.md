@@ -151,9 +151,15 @@ Web socket is in charge of communicating with the AWS Websocket API so that the 
     Where the senderConnectionID will help determine if the message is coming from other user or simply an echo of the message that this client sent. The actual message then is parsed and decryted and saved.<br />
 
 3. Key Generation:
-
+    if the incoming message is of type keyGen, then the raw text would be <br />
+    `<messageType>+=+<senderConnectionID>+=+<prime>+=+<gen>+=+<n>`<br />
+    The fields prime and gen are used to instantiate an instance of the Df class, which is used to generate the users secret key. the n field represents the number of users currently connected. After the Df class is initiated, the user calculates a public key with it sends, along with n, in a keyExchange message to the websocket
+    
 4. Key Exchange:
-
+    if the incoming message is of type keyExchange, then the raw text would be <br />
+    `<messageType>+=+<senderConnectionID>+=+<publickey>+=+<n>`<br />
+    The field publickey is the generated public key of the user whos ID is stored before the recieving user. The recieving user uses this key to generate a new key with their Df object. The n field represents the number of remaining rounds of key exchange. if n is greater than 1, then the newly generated key, along with n, is sent in a keyExchange message to the websocket. Otherwise, the newly generated key is kept by the user for decrypting and encrypting messages.
+        
 `saveMsg()` The function will be called when the webSocket recieved a text message. The message will be formatted into javascript object with two properties: type and content. The type could be either external or internal. The content will be the actual message that other clients snet. <br />
 Note that in current implementation these message willbe pushed into a global array in client's local memory. Thus the message history will be discarded if the user disconnect.
 
