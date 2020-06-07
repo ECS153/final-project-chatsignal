@@ -5,7 +5,8 @@ To run the project locally, go into ./final-project-chatsignal/chat-signal and r
 `npm run build` to make a new production build. <br/>
 After the build is complete, a "build" folder will appear. Move that folder to ./final-project-chatsignal/chat-signal/public and replace the old build. <br/>
 Go into the public directory and use the command
-`npm start` to start the project locally. The default port is localhost:3000.<br/>
+`npm start` to start the project locally. The default port is `localhost:3000`.<br/>
+First time user should register and login to chatsignal. You can open up two localhosts to test out the chat functionality.
 
 ### Project structure
 
@@ -69,7 +70,40 @@ chat-signal
 
 
 ## AWS
+
+
+
+
+
+
+
 ## Login
+
+
+
+
+
+
+
+
 ## Chatroom
+
+
+
+
+
+
+
+
+
 ## Encryption
+
+
+
+
+
+
+
+
+
 ## WebSocket
