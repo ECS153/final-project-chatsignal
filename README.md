@@ -41,6 +41,7 @@ chat-signal
     │
     └───AWS
     │   │   fetchUserInfo.js
+    |   |   populateUserInfo.js
     │   │   HandleMessage.js
     │   │   onConnect.js
     │   │   onDisconnect.js
@@ -76,6 +77,9 @@ chat-signal
 The following functions are AWS lambda functions that are invoked accordingly when AWS Websocket API recieve a request or message. These files will not work or have any effect locally. For more detail on how to setup Web socket and lambda functions on AWS, please refer to the Documentation directory.
 
   * `fetchUserInfo.js` <br />
+    When the client fetches account information from the database, the get request will cause API gateway to call this function. This function will call dynamodb.getItem based on the username, which acts as the key to the other account information. <br />
+  * `populateUserInfo.js` <br />
+    When a post request to populate the account database is called by the client, the API gateway will call this lambda function to add/replace the account info on the database using dynamodb.putItem. The username will be stored as the "key" to the rest of the items. <br />
     
   * `HandleMessage.js` <br />
     When a message is sent to the route `onMessageCopy`, this funciton will be invoked. The function will parsed the actual message, scan the database for all the connection Ids that appeared in the same table as the sender, and initiate a POST request to forward the incoming message to every clients that are connected to the socket. <br />
@@ -104,10 +108,24 @@ The following functions are AWS lambda functions that are invoked accordingly wh
 
 
 
-## Login
+## Register/Login
+### Register
+* `register.jsx` <br />
+    This module handles the registration aspect of the login authentication, including populating the form and calling get/post requests.
+    When a user fills out the form, onChange will update the variables: username, email, and password. This is done by handleX(event) where X are the variable names.
+    The following are the components that will be invoked when the register button is pressed:
+    * `checkForm(event)` <br /> 
+        This function will check for empty input fields, duplicate usernames (through a get request), and password strength. It will call saltAndHash() and handleCity() if no errors are found in the input fields.
+    * `saltAndHash(event)` <br />
+        This function will use bcryptjs to replace the plain password with a salted and hashed password. The password will go through 10 rounds of salt and the salt is saved as part of the hashed password.
+    * `handleCity(event)` <br />
+        This function fetches the user's IP address using Ipify's API. The IP address will then be used to get the user's city via ip-api's API. The city will be stored as a variable via getCity(response.city).
+    * `addDB(event)` <br />
+        This function will invoke after city is updated. The account information will be sent via an axios post request to API gateway, which will call the lambda function populateUserInfo. If the request is successful, the variable regSuccess will be set to true. checkRegistered(regSuccess) is then called.
+     * `checkRegistered(regSuccess)` <br />
+        If the registration was a success, the user will be redirected to the login page. Otherwise, an error message will show asking the user to try registering again.
 
-
-
+### Login
 
 
 
