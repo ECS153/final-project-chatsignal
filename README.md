@@ -1,5 +1,7 @@
 # ChatSignal: A Web Based AES Encrypted Chat App
 
+<img src=chat-signal/Documentation/ChatroomDemo.png width="1291" height="520">
+
 ## Build and run chatsignal locally
 To run the project locally, go into ./final-project-chatsignal/chat-signal and run the command 
 `npm run build` to make a new production build. <br/>
@@ -106,6 +108,8 @@ The following functions are AWS lambda functions that are invoked accordingly wh
     This function is called as soon as the user connects to the websocket. It returns to the caller the connection ID associated with their session. This connection ID is used by later functions on the client side.
 
 ## Register
+<img src=chat-signal/Documentation/LoginRegisterDemo.png width="1200" height="550" />
+
 * `register.jsx` <br />
     This module handles the registration aspect of the login authentication, including populating the form and calling get/post requests.
     When a user fills out the form, onChange will update the variables: username, email, and password. This is done by handleX(event) where X are the variable names.
