@@ -72,18 +72,18 @@ chat-signal
 ## AWS
 The following functions are AWS lambda functions that are invoked accordingly when AWS Websocket API recieve a request or message. These files will not work or have any effect locally. For more detail on how to setup Web socket and lambda functions on AWS, please refer to the Documentation directory.
 
-⋅⋅* fetchUserInfo.js
+  * `fetchUserInfo.js` <br />
     
-⋅⋅* HandleMessage.js
+  * `HandleMessage.js` <br />
     When a message is sent to the route `onMessageCopy`, this funciton will be invoked. The function will parsed the actual message, scan the database for all the connection Ids that appeared in the same table as the sender, and initiate a POST request to forward the incoming message to every clients that are connected to the socket. <br />
     
-⋅⋅* onConnect.js
+  * `onConnect.js` <br />
     When a user is connected to the socket for the first time, this function will be invoked and it will assign the newly connected user a unique connection id. This id will also be store into a database for future message forwarding purpose. <br />
 
-⋅⋅* onDisconnect.js
+  * `onDisconnect.js` <br />
     When a user disconnect from the socket, this function will be invoked. The function will scan the appropriate database table and remove the entry that contians this disconnected user's conneciton id. <br />
 
-⋅⋅* patch.js
+  * `patch.js` <br />
     This is a helper function that has to do with AWS websocket API. This patch is needed in order to successfully POST a message to a connected client with his/her connection id.
 
 
