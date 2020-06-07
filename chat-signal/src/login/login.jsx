@@ -4,7 +4,6 @@ import logoImg from "../chatsignal.png"
 import { message } from 'antd';
 import axios from 'axios';
 
-//TODO: implement authentication.
 export const Login = () => {
     const [username, getUsername] = useState(0); // react hooks
     const [password, getPassword] = useState(0); // react hooks

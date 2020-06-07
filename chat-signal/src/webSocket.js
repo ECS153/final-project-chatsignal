@@ -1,6 +1,6 @@
 /* global BigInt */
-import * as AES from "./AES.js"
-import Df from "./Df.js"
+import * as AES from "./Encryption/AES.js"
+import Df from "./Encryption/Df.js"
 const url = "wss://in6l1ijjf5.execute-api.us-west-2.amazonaws.com/KeyExchangeBeta";
 const connection = new WebSocket(url);
 
@@ -32,11 +32,12 @@ connection.onmessage = (message) => {
   console.log("MessageType:" + messageType);
   console.log("SenderID: " + senderID);
   if (messageType.localeCompare("txtMsg") === 0) {
-    let actualMessage = messageData.split("+=+")[2];
+    let actualMessage = messageData.split("+=+")[3];
+    let senderName = messageData.split("+=+")[2];
     console.log("Recieved Encrypted Message: " +actualMessage);
     if(actualMessage != undefined && userSecret.getKey() != null) {
     let decryptedMsg = AES.AES_Decrypt(actualMessage, userSecret.getKey());
-      saveMsg(senderID, decryptedMsg);
+      saveMsg(senderID, senderName, decryptedMsg);
     }
   } else if (messageType.localeCompare("id") === 0) {
     connectionId = messageData.split("+=+")[1];
@@ -69,13 +70,15 @@ connection.onmessage = (message) => {
   }
 };
 
-const saveMsg = (sender, message) => {
+const saveMsg = (sender,userName, message) => {
   //  If the senderID == this client's connection ID, the message is from this client
   //  If the connection ID doesn't match, this is a external message
+  console.log("Sender: " + userName);
   let type = sender === connectionId ? "internal" : "external";
   let msg = {
     type: type,
     content: message.toString(),
+    user: userName
   };
   //  Add this message to the messsage history
   messageHistory.push(msg);
@@ -91,11 +94,11 @@ export const fetchKey = () => {
 }
 
 //  Send message to the websocket. Only allow client to send after the connection is established
-export const sendMsg = (message) => {
+export const sendMsg = (userID, message) => {
   if (CONNECTED === true) {
     console.log("test");
     connection.send(
-      `{"action": "onMessageCopy", "message": "${message.toString()}"}`
+      `{"action": "onMessageCopy", "userID": "${userID.toString()}", "message": "${message.toString()}"}`
     );
   }
 };
