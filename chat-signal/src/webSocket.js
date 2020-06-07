@@ -1,6 +1,6 @@
 /* global BigInt */
-import * as AES from "./AES.js"
-import Df from "./Df.js"
+import * as AES from "./Encryption/AES.js"
+import Df from "./Encryption/Df.js"
 const url = "wss://in6l1ijjf5.execute-api.us-west-2.amazonaws.com/KeyExchangeBeta";
 const connection = new WebSocket(url);
 

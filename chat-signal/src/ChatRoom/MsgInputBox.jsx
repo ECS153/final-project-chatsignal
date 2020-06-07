@@ -1,7 +1,7 @@
 /* global BigInt */
 import React, { useState } from "react";
 import { sendMsg, fetchKey } from "../webSocket";
-import * as AES from "../AES.js"
+import * as AES from "../Encryption/AES.js"
 
 const MsgInputBox = (props) => {
   const [message, setMsg] = useState("");
