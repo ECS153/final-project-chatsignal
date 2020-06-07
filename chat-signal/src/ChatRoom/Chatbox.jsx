@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "antd/dist/antd.css";
 import { Button } from "antd";
 import MsgInputBox from "./MsgInputBox.jsx";
@@ -6,6 +6,9 @@ import { fetchMsgHistory, disconnect } from "../webSocket";
 
 const MessageCell = (props) => (
   <div style={props.style}>
+    <div style = {props.nameStyle}>
+      {props.user}
+    </div>
     <div style={Styles.messageCellContainer}>
       {/* {props.showAvatar ? (
         <div style={Styles.blubStyle}>{props.chatter.initial}</div>
@@ -22,7 +25,9 @@ class MsgHistoryBox extends React.Component {
       msgHistory: [],
       count: 0,
       delay: 1000,
+      lastMsg: null
     };
+
   }
 
   componentDidMount() {
@@ -40,14 +45,20 @@ class MsgHistoryBox extends React.Component {
   render() {
     return (
       <div style={Styles.ChatboxContainer}>
-        {this.state.msgHistory.map((msg) => (
+        {this.state.msgHistory.map((msg,i,arr) => (
           <MessageCell
             style={
               msg.type === "external"
                 ? Styles.externalMessageStyle
                 : Styles.ownMessageStyle
             }
+            nameStyle={
+              (msg.type === "external" && (i === 0 || arr[i-1].user != msg.user))
+                ? Styles.useNameOther
+                : Styles.useNameOwn
+            }
             content={msg.content}
+            user = {msg.user}
             chatter={this.props.chatter}
             showAvatar={msg.type === "external" ? true : false}
           />
@@ -77,7 +88,7 @@ const Chatbox = (props) => {
         <MsgHistoryBox chatter={props.chatter} />
       </div>
       <div>
-        <MsgInputBox />
+        <MsgInputBox userID={props.userID} />
       </div>
     </div>
   );
@@ -129,7 +140,7 @@ const Styles = {
     backgroundColor: "#3C5B7C",
     color: "white",
     padding: "12px 20px",
-    borderRadius: 25,
+    borderRadius: "25px",
     fontSize: 14,
     display: "flex",
     flexDirection: "row",
@@ -137,17 +148,26 @@ const Styles = {
   },
   externalMessageStyle: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "flex-start",
-    margin: "12px 0",
+    alignItems: "flex-start",
+    margin: "2px 0",
+    fontFamily: "Karla",
+    fontWeight: 400,
+  },
+  useNameOwn: {
+    display: "none",
+  },
+  useNameOther: {
     fontFamily: "Karla",
     fontWeight: 400,
   },
   ownMessageStyle: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "flex-end",
-    margin: "12px 0",
+    alignItems: "flex-end",
+    margin: "2px 0",
     fontFamily: "Karla",
     fontWeight: 400,
   },

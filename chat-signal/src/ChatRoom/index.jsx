@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import ContactsSidebar from "./ContactsSidebar.jsx";
 import Chatbox from "./Chatbox.jsx";
+import { useHistory } from "react-router-dom";
 
 const ChatRoom = props => {
   const location = useLocation();
@@ -26,7 +27,7 @@ const ChatRoom = props => {
         <ContactsSidebar userID={location.state.userID} contacts={contacts} updateChatter={onContactPressed} />
       </div>
       <div style={Styles.rightContainer}>
-        <Chatbox chatter={contacts[selectedChatterIndex]} />
+        <Chatbox userID={location.state.userID} chatter={contacts[selectedChatterIndex]} />
       </div>
     </div>
   );

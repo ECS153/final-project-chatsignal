@@ -40,7 +40,7 @@ class Df {
   }
   computeSecret(gen) {
     let pubKey = BigInt(gen);
-    this.key = pubKey ** this.secret % this.p;
+    this.key = BigInt(pubKey) ** BigInt(this.secret) % BigInt(this.p);
     return this.key;
   }
   getKey() {
