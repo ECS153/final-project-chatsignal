@@ -143,49 +143,51 @@ The following functions are AWS lambda functions that are invoked accordingly wh
 
 ## Encryption
 * `AES.js` <br />
-    This module handles encrypting and decrypting messages. The following are components in AES encryption/decryption:
-    * `ExpandKey(key)` <br /> 
+    * This module handles encrypting and decrypting messages. The following are components in AES encryption/decryption:
+        * `ExpandKey(key)` <br /> 
         This function takes a 265 bit key and expands it into 15 128 bit round keys.
-    * `AddRoundKey(stateArray,rKey)` <br />
+        * `AddRoundKey(stateArray,rKey)` <br />
         This function XORs the current state array to the current round key
-    * `SubBytes(stateArray)` <br />
+        * `SubBytes(stateArray)` <br />
         This function preforms a substitution on each byte of the state array. The substitution is based off of the Rijndael S-box https://en.wikipedia.org/wiki/Rijndael_S-box
-    * `ShiftRows(stateArray)` <br />
+        * `ShiftRows(stateArray)` <br />
         This function shifts the rows of the state array to the left in a circular fashion
-    * `MixColumns(stateArray)` <br />
+        * `MixColumns(stateArray)` <br />
         This function "multiplies" the state array in a special way by substituting each byte of a row and XORing it to get an element of the new state array https://en.wikipedia.org/wiki/Rijndael_MixColumns
-    * `invSubBytes(stateArray)` <br />
+        * `invSubBytes(stateArray)` <br />
         Inverse of SubBytes, uses the inverse to the original substitution box
-    * `invShiftRows(stateArray)` <br />
+        * `invShiftRows(stateArray)` <br />
         Inverse of ShiftRows. Shifts each row to the right in a circular fashion.
-    * `invMixColumns(stateArray)` <br />
+        * `invMixColumns(stateArray)` <br />
         Invers of MixColumns. Same type of multiplication but using different substitutions.
-    AES_Encryption takes a message string and a BigInt key as arguments. The key is expanded using `ExpandKey` and the message string is split up into 16-character long groups. These groups are put into a 4x4 array, which is then encrypted by preforming the following transformations:
-    * AddRoundKey
-    13 of rounds:
-    * SubBytes
-    * ShiftRows
-    * MixColumns
-    then:
-    * SubBytes
-    * ShiftRows
-    * AddRoundKey
-    The resulting encrypted message piece is added to a string, and then the next group of characters is encrypted and added to the string untill the entire message has been encrypted. The resulting string is then returned
-    AES_Decryption is meant to preform the inverse of all the Encryption transformations. It works the exact same way by splitting up the message, but each piece undergoes the following transformations instead:
-    * AddRoundKey
-    13 of rounds:
-    * invShiftRows
-    * invSubBytes
-    * invMixColumns
-    then:
-    * invShiftRows
-    * invSubBytes
-    * AddRoundKey
+        <br />
+    * AES_Encryption takes a message string and a BigInt key as arguments. The key is expanded using `ExpandKey` and the message string is split up into 16-character long groups. These groups are put into a 4x4 array, which is then encrypted by preforming the following transformations:
+        * AddRoundKey
+        13 of rounds:
+        * SubBytes
+        * ShiftRows
+        * MixColumns
+        then:
+        * SubBytes
+        * ShiftRows
+        * AddRoundKey
+    * The resulting encrypted message piece is added to a string, and then the next group of characters is encrypted and added to the string untill the entire message has been encrypted. The resulting string is then returned
+    * AES_Decryption is meant to preform the inverse of all the Encryption transformations. It works the exact same way by splitting up the message, but each piece undergoes the following transformations instead:
+        * AddRoundKey
+        13 of rounds:
+        * invShiftRows
+        * invSubBytes
+        * invMixColumns
+        then:
+        * invShiftRows
+        * invSubBytes
+        * AddRoundKey
 * `Df.js` <br />
     This module contains a class that stores the user secret and is used to generat the secret encryption key. A Df object contains a secret, a generator (g), a base (p), a key and the number of rounds remaining before a private key is considered established. The secret is a randomly generated number between 1 and 1000. This number is never shared with anyone. The generator and base are set by the server. The key is generated on each round of key passing. The following functions are part of key generation:
     * `compute()` <br /> sets and returns the key based off of the generator, base and secret according to the formula `g^(secret) % base`
     
     * `computeSecret(gen)` <br /> sets and returns the key based off of a passed in public key used as the new generator, the base and secret according to the formula `gen^(secret) % base`
+    <br />
     Df key exchange is preformed by websocket.js in rounds. After the initial key generation, users pass their keys to the next user. The users then all generate new keys based off of the keys passed to them. Users continue to pass and generate new keys until every user has recieved n number of keys where n is the number of users minus 1. This key exchange is secure because the final public key is never revealed and can only bebe obtained by being part of the Df circular exchange.
     
     
