@@ -124,7 +124,12 @@ The following functions are AWS lambda functions that are invoked accordingly wh
 
 
 ## Encryption
+* `AES.js` <br />
+    This module handles encrypting and decrypting messages. The following are components in AES encryption/decryption:
+    
 
+* `Df.js` <br />
+    This module stores the user secret and is used to generat the secret encryption key
 
 
 
