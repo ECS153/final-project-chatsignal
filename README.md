@@ -13,15 +13,19 @@ Go into the public directory and use the command
 .
 chat-signal
 │   
+│   App.js
+│   index.js
+│   serviceWorker.js
+│   webSocket.js
+│   package-lock.json
+│   package.json
+|
 └───Documentation
 │   │   AWS and React Documentation.txt
 │   │   Chat Signal Chatroom mockup.png
 │   
 └───node-modules
 │   │   ...(dependencies)
-│
-│   package-lock.json
-│   package.json
 │
 └───public
 │   │   index.html
@@ -68,3 +72,4 @@ chat-signal
 ## Login
 ## Chatroom
 ## Encryption
+## WebSocket
