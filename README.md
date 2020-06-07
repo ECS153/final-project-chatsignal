@@ -84,7 +84,7 @@ The following functions are AWS lambda functions that are invoked accordingly wh
     When a post request to populate the account database is called by the client, the API gateway will call this lambda function to add/replace the account info on the database using dynamodb.putItem. The username will be stored as the "key" to the rest of the items. <br />
     
   * `HandleMessage.js` <br />
-    When a message is sent to the route `onMessageCopy`, this funciton will be invoked. The function will parsed the actual message, scan the database for all the connection Ids that appeared in the same table as the sender, and initiate a POST request to forward the incoming message to every clients that are connected to the socket. <br />
+    When a message is sent to the route `onMessage`, this funciton will be invoked. The function will parsed the actual message, scan the database for all the connection Ids that appeared in the same table as the sender, and initiate a POST request to forward the incoming message to every clients that are connected to the socket. <br />
     
   * `onConnect.js` <br />
     When a user is connected to the socket for the first time, this function will be invoked and it will assign the newly connected user a unique connection id. This id will also be stored into a database for future message forwarding purpose. <br />
@@ -189,7 +189,7 @@ The following functions are AWS lambda functions that are invoked accordingly wh
 ## WebSocket
 Web socket is in charge of communicating with the AWS Websocket API so that the user can send and recieve message in real time. The following overview will walk you through the basic workflow of how the web socket manage, parse, and store incoming data and how it send client requested messages.
 
-`connection.onopen()` Upon connection establish, the webSocket will immediately send a request to the AWS API to get this client's conneciton id. The route is "requestConnectionIDCopy."<br />
+`connection.onopen()` Upon connection establish, the webSocket will immediately send a request to the AWS API to get this client's conneciton id. The route is `requestConnectionID`.<br />
 
 `connection.onmessage()` Upon recieving message from other clients, there are four possible cases. Note that the raw message is a string that's delimited by "+=+" characters.<br />
 
