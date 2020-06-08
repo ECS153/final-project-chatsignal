@@ -127,7 +127,17 @@ The following functions are AWS lambda functions that are invoked accordingly wh
 
 ## Login
 
-
+* `login.jsx` <br />
+    This module handles the login aspect of the app authentication process.
+    When the user fills our the form with their username and password, our onChange event will automatically grab the user information for future use. 
+    The following are the components that will be invoked when the login button is pressed:
+    
+    * `handleCity(event)` <br />
+        This function fetches the user's IP address using Ipify's API. The IP address will then be used to get the user's city via ip-api's API. The city will be stored as a variable via getCity(response.city).
+    * `fetchUserInfo(event)` <br />
+        This function will do a GET request to our database with the parameter of the username that was entered during authentication. Using an axios get request to our API Gateway on AWS, the lambda function fetchUserInfo will be called. If no error is returned, it means that the user entered the correct credentials, successfully logging them into our chat app. However, if their current location does not match the stored city, we route the user into a new page called EmailPage which prompts the user to verify their email. On successful verification, an axios POST request is used to update the user's location into our database. 
+     * `checkVerified(regSuccess)` <br />
+        This function verifies that the user's current location matches the stored location within our database. 
 
 
 
