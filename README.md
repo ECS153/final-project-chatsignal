@@ -143,8 +143,20 @@ The following functions are AWS lambda functions that are invoked accordingly wh
 
 ## Chatroom
 
+The chatroom is composed of several subcomponents for the purpose of reusability and state encapsulation.
 
+<img src="chat-signal/Documentation/Chatroom UI breakdown.png" width="1291" height="520">
 
+* `index.jsx` <br />
+    This is the entire chatroom itself. It acts as a parent component to all the subcomponents and can be importe. <br />
+  * `ContactsSidebar.jsx` <br />
+        This component acts as the container for the user's personal information cell and contact list and is composed of many `ContactsCell` component<br />
+  * `ContactsCell.jsx` <br />
+        This component represents an user information box, with information like username, profile picture, and user status. <br />
+  * `Chatbox.jsx` <br />
+    This component acts as the container for the entire right hand side of the chatroom, including a selected chatroom's header, the end connection button, the chatroom message display, and the `MsgInputBox` component on the bottom. <br />
+  * `MsgInputBox.jsx` <br />
+    This component acts as a text input box for user to enter message and send it via the `Send` button. It can contains up to 300 words. <br />
 
 
 ## Encryption
