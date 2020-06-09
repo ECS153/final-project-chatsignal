@@ -143,8 +143,20 @@ The following functions are AWS lambda functions that are invoked accordingly wh
 
 ## Chatroom
 
+The chatroom is composed of several subcomponents for the purpose of reusability and state encapsulation.
 
+<img src="chat-signal/Documentation/Chatroom UI breakdown.png" width="1291" height="520">
 
+* `index.jsx` <br />
+    This is the entire chatroom itself. It acts as a parent/wrapper component to all the subcomponents. All the state information essential for the chatroom to function is stored here. This component passes these state information down to the subcomponents as props when necessary. <br />
+  * `ContactsSidebar.jsx` <br />
+        This component acts as the container for the user's personal information cell and contact list and is composed of many `ContactsCell` component<br />
+      * `ContactsCell.jsx` <br />
+            This component represents an user information box, with information like username, profile picture, and user status. <br />
+  * `Chatbox.jsx` <br />
+    This component acts as the container for the entire right hand side of the chatroom, including a selected chatroom's header, the end connection button, the chatroom message display, and the `MsgInputBox` component on the bottom. <br />
+      * `MsgInputBox.jsx` <br />
+        This component acts as a text input box for user to enter message and send it via the `Send` button. It can contains up to 300 words. <br />
 
 
 ## Encryption
@@ -168,22 +180,22 @@ The following functions are AWS lambda functions that are invoked accordingly wh
         Invers of MixColumns. Same type of multiplication but using different substitutions.
         <br />
     * AES_Encryption takes a message string and a BigInt key as arguments. The key is expanded using `ExpandKey` and the message string is split up into 16-character long groups. These groups are put into a 4x4 array, which is then encrypted by preforming the following transformations:
-        * AddRoundKey
-        13 of rounds:
+        * AddRoundKey <br />
+        13 rounds of:
         * SubBytes
         * ShiftRows
-        * MixColumns
+        * MixColumns <br />
         then:
         * SubBytes
         * ShiftRows
         * AddRoundKey
     * The resulting encrypted message piece is added to a string, and then the next group of characters is encrypted and added to the string untill the entire message has been encrypted. The resulting string is then returned
     * AES_Decryption is meant to preform the inverse of all the Encryption transformations. It works the exact same way by splitting up the message, but each piece undergoes the following transformations instead:
-        * AddRoundKey
-        13 of rounds:
+        * AddRoundKey <br />
+        13 rounds of:
         * invShiftRows
         * invSubBytes
-        * invMixColumns
+        * invMixColumns <br />
         then:
         * invShiftRows
         * invSubBytes
