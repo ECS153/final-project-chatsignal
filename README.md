@@ -148,7 +148,7 @@ The chatroom is composed of several subcomponents for the purpose of reusability
 <img src="chat-signal/Documentation/Chatroom UI breakdown.png" width="1291" height="520">
 
 * `index.jsx` <br />
-    This is the entire chatroom itself. It acts as a parent component to all the subcomponents and can be importe. <br />
+    This is the entire chatroom itself. It acts as a parent/wrapper component to all the subcomponents. All the state information essential for the chatroom to function is stored here. This component passes these state information down to the subcomponents as props when necessary. <br />
   * `ContactsSidebar.jsx` <br />
         This component acts as the container for the user's personal information cell and contact list and is composed of many `ContactsCell` component<br />
   * `ContactsCell.jsx` <br />
